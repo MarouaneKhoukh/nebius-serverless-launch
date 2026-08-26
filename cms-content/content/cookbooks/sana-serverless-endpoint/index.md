@@ -5,7 +5,7 @@ slug: "sana-serverless-endpoint"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "Standalone Sana endpoint adapted from nebius/serverless-ai-cookbook. The application tests, pinned image manifests, repository links, and rendered deploy link were checked on 2026-08-26. No live L40S run has established cost or time. The current CMS evaluator rejects media targets and cannot provision Serverless resources, so this eval remains disabled. A non-Token-Factory model reference is also needed before publication."
+internal_content_description: "Standalone Sana endpoint adapted from nebius/serverless-ai-cookbook. The application tests, pinned image manifests, repository links, and rendered deploy link were checked on 2026-08-26. No live L40S run has established cost or time. The current CMS evaluator rejects media targets and cannot provision Serverless resources, so this eval remains disabled. A schema-compatible Nebius-owned exact-model reference is also required before publication."
 github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/sana-endpoint"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Generate Images with Sana on Serverless AI"

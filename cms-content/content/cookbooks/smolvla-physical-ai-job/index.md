@@ -1,23 +1,25 @@
 ---
 id: "1202df8c-70c5-46a8-913a-5e7f248b6cc5"
 status: "in_review"
-slug: smolvla-physical-ai-job
-internal_content_description: An adapted physical-AI training template using official LeRobot assets because the original external dataset endpoint is unavailable; live Nebius evidence is pending.
-category: serverless-ai
-author: marouane-khoukh
+slug: "smolvla-physical-ai-job"
+category: "serverless-ai"
+author: "marouane-khoukh"
 model: null
-github_url: https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/smolvla-finetune-job
-video_url: https://www.youtube.com/watch?v=ZjD489E0lls
-catalog_card_title: Fine-tune SmolVLA for physical AI in a GPU job
-catalog_card_description: Run a short SmolVLA fine-tune with LeRobot on Nebius, validate the saved checkpoint, and learn where simulation ends and robot testing begins.
+internal_content_description: "An adapted physical-AI training template using official LeRobot assets because the original external dataset endpoint is unavailable. Live cost and timing evidence, a Serverless-job eval adapter, and a schema-compatible Nebius-owned exact-model reference are required before publication."
+github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/smolvla-finetune-job"
+video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
+catalog_card_title: "Fine-tune SmolVLA for physical AI in a GPU job"
+catalog_card_description: "Run a short SmolVLA fine-tune with LeRobot on Nebius, validate the saved checkpoint, and learn where simulation ends and robot testing begins."
 estimated_cost_per_run_usd: null
-cost_qualifier: approximate
+cost_qualifier: "approximate"
 time_to_first_run_minutes: null
-time_qualifier: approximately
+time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
 sort: 150
 ---
+
+# Fine-tune SmolVLA for physical AI in a GPU job
 
 ## What you will build
 

@@ -1,23 +1,25 @@
 ---
 id: "8be0a422-5df5-4bc0-927e-96c394de4a04"
 status: "in_review"
-slug: qwen-image-edit-serverless
-internal_content_description: A reproducible Qwen Image Edit Serverless endpoint with deterministic input and output checks; live cost and timing evidence remain to be collected.
-category: serverless-ai
-author: marouane-khoukh
+slug: "qwen-image-edit-serverless"
+category: "serverless-ai"
+author: "marouane-khoukh"
 model: null
-github_url: https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/qwen-image-edit-endpoint
-video_url: https://www.youtube.com/watch?v=Ftr-6JF08ZI
-catalog_card_title: Edit images with Qwen on Serverless
-catalog_card_description: Deploy Qwen Image Edit as a Serverless API, submit an image and instruction, verify the PNG result, and remove the endpoint afterward.
+internal_content_description: "A reproducible Qwen Image Edit Serverless endpoint with deterministic input and output checks. Live cost and timing evidence, a media-capable eval adapter, and a schema-compatible Nebius-owned exact-model reference are required before publication."
+github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/qwen-image-edit-endpoint"
+video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
+catalog_card_title: "Edit images with Qwen on Serverless"
+catalog_card_description: "Deploy Qwen Image Edit as a Serverless API, submit an image and instruction, verify the PNG result, and remove the endpoint afterward."
 estimated_cost_per_run_usd: null
-cost_qualifier: approximate
+cost_qualifier: "approximate"
 time_to_first_run_minutes: null
-time_qualifier: approximately
+time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
 sort: 130
 ---
+
+# Edit images with Qwen on Serverless
 
 ## What you will build
 

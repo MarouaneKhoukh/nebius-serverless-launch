@@ -1,23 +1,25 @@
 ---
 id: "4535df76-e913-4990-bcce-b060ed70c71a"
 status: "in_review"
-slug: kokoro-serverless-tts
-internal_content_description: A reproducible Serverless endpoint for Kokoro-82M with audio verification; production cost and timing evidence still require a live Nebius run.
-category: serverless-ai
-author: marouane-khoukh
+slug: "kokoro-serverless-tts"
+category: "serverless-ai"
+author: "marouane-khoukh"
 model: null
-github_url: https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/kokoro-tts-endpoint
-video_url: https://www.youtube.com/watch?v=Ftr-6JF08ZI
-catalog_card_title: Deploy Kokoro text-to-speech on Serverless
-catalog_card_description: Deploy Kokoro-82M as a scalable speech endpoint, generate MP3 or WAV audio, verify the response, and clean up every cloud resource.
+internal_content_description: "A reproducible Serverless endpoint for Kokoro-82M with audio verification. Live cost and timing evidence, a Serverless-capable eval adapter, and a schema-compatible Nebius-owned exact-model reference are required before publication."
+github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/kokoro-tts-endpoint"
+video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
+catalog_card_title: "Deploy Kokoro text-to-speech on Serverless"
+catalog_card_description: "Deploy Kokoro-82M as a scalable speech endpoint, generate MP3 or WAV audio, verify the response, and clean up every cloud resource."
 estimated_cost_per_run_usd: null
-cost_qualifier: approximate
+cost_qualifier: "approximate"
 time_to_first_run_minutes: null
-time_qualifier: approximately
+time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
 sort: 120
 ---
+
+# Deploy Kokoro text-to-speech on Serverless
 
 ## What you will build
 

@@ -1,23 +1,25 @@
 ---
 id: "003cacac-6b00-455b-a90e-bc2e781616c2"
 status: "in_review"
-slug: axolotl-qwen-finetune-job
-internal_content_description: A bounded Axolotl QLoRA job with artifact validation and cleanup; live Nebius cost and completion timing still require measurement.
-category: serverless-ai
-author: marouane-khoukh
+slug: "axolotl-qwen-finetune-job"
+category: "serverless-ai"
+author: "marouane-khoukh"
 model: null
-github_url: https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/axolotl-finetune-job
-video_url: https://www.youtube.com/watch?v=ZjD489E0lls
-catalog_card_title: Fine-tune Qwen with Axolotl in a GPU job
-catalog_card_description: Run a short Qwen QLoRA fine-tune with Axolotl, persist the adapter in Object Storage, verify its files, and delete the GPU job.
+internal_content_description: "A bounded Axolotl QLoRA job with artifact validation and cleanup. This draft follows the serverless-ai-cookbook template's preemptible H100 and 500 GiB configuration; the separate Nebius fine-tuning tutorial currently shows L40S and 450 GiB, so DevRel should resolve that source difference before publication. Live cost and timing evidence, a Serverless-job eval adapter, and a schema-compatible Nebius-owned exact-model reference are also required."
+github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/axolotl-finetune-job"
+video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
+catalog_card_title: "Fine-tune Qwen with Axolotl in a GPU job"
+catalog_card_description: "Run a short Qwen QLoRA fine-tune with Axolotl, persist the adapter in Object Storage, verify its files, and delete the GPU job."
 estimated_cost_per_run_usd: null
-cost_qualifier: approximate
+cost_qualifier: "approximate"
 time_to_first_run_minutes: null
-time_qualifier: approximately
+time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
 sort: 140
 ---
+
+# Fine-tune Qwen with Axolotl in a GPU job
 
 ## What you will build
 

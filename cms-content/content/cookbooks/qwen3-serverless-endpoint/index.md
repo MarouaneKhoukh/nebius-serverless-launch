@@ -5,7 +5,7 @@ slug: "qwen3-serverless-endpoint"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "Standalone Serverless Endpoint project created from the Qwen3-0.6B template in nebius/serverless-ai-cookbook. The GitHub project, local tests, container tag, and rendered deploy link were checked on 2026-08-26. Live L40S execution, cost, and time-to-first-run remain unmeasured. The eval is disabled because the current harness targets text-only Token Factory calls and cannot create or test a Nebius Serverless Endpoint. Add a Serverless-capable eval adapter and a successful controlled run before publishing."
+internal_content_description: "Standalone Serverless Endpoint project created from the Qwen3-0.6B template in nebius/serverless-ai-cookbook. The GitHub project, local tests, container tag, and rendered deploy link were checked on 2026-08-26. Live L40S execution, cost, and time-to-first-run remain unmeasured. The eval is disabled because the current harness targets text-only Token Factory calls and cannot create or test a Nebius Serverless Endpoint. A schema-compatible Nebius-owned exact-model reference, a Serverless-capable eval adapter, and a successful controlled run are required before publishing."
 github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/qwen3-endpoint"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Deploy Qwen3-0.6B on a Serverless Endpoint"
