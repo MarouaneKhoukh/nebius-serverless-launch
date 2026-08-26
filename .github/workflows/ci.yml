@@ -12,18 +12,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python -m pip install 'fastapi==0.141.1' 'pydantic==2.12.5' 'uvicorn==0.52.1'
-      - name: Validate all six projects
-        shell: bash
-        run: |
-          set -euo pipefail
-          for project in \
-            qwen3-endpoint \
-            sana-endpoint \
-            kokoro-tts-endpoint \
-            qwen-image-edit-endpoint \
-            axolotl-finetune-job \
-            smolvla-finetune-job
-          do
-            (cd "$project" && bash scripts/check.sh)
-          done
+      - name: Validate CMS source
+        run: python3 scripts/check_content.py
+      - name: Validate SmolVLA template
+        working-directory: smolvla-finetune-job
+        run: bash scripts/check.sh

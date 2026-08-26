@@ -5,11 +5,11 @@ slug: "sana-serverless-endpoint"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "Standalone Sana endpoint adapted from nebius/serverless-ai-cookbook. The application tests, pinned image manifests, repository links, and rendered deploy link were checked on 2026-08-26. No live L40S run has established cost or time. The current CMS evaluator rejects media targets and cannot provision Serverless resources, so this eval remains disabled. A schema-compatible Nebius-owned exact-model reference is also required before publication."
-github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/sana-endpoint"
+internal_content_description: "CMS adaptation of the existing Sana one-click endpoint template in nebius/serverless-ai-cookbook. Live L40S and media-output validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
+github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-sana"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
-catalog_card_title: "Generate Images with Sana on Serverless AI"
-catalog_card_description: "Deploy Sana 1.6B on a preemptible L40S, call an OpenAI-shaped image API, and preserve a validated PNG plus run evidence."
+catalog_card_title: "Generate images with Sana on Serverless"
+catalog_card_description: "Deploy Sana 1.6B from a one-click template and turn a text prompt into a 1024-pixel image on an L40S."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: null
@@ -19,66 +19,30 @@ published_at: null
 sort: 110
 ---
 
-# Generate Images with Sana on Serverless AI
+# Generate images with Sana on Serverless
 
-Deploy `Efficient-Large-Model/Sana_1600M_1024px_diffusers` behind an OpenAI-shaped image generation API on one preemptible L40S. The project includes the FastAPI server, a pinned Dockerfile, a tested published container, and a smoke test that decodes and validates the generated PNG.
+Deploy `Efficient-Large-Model/Sana_1600M_1024px_diffusers` as a text-to-image endpoint using the existing Nebius Serverless template. The template points to the prepared serving image and includes the request contract needed to generate an image.
 
-## What you will build
+> **Why this matters for Serverless:** A GPU-backed image model becomes an HTTP service in your own Nebius project, with lifecycle and access controlled by you.
 
-The endpoint exposes:
+## What you'll deploy
 
-- `GET /v1/models` as its readiness contract;
-- `POST /v1/images/generations` for text-to-image requests;
-- bounded controls for image count, dimensions, and inference steps;
-- deterministic evidence output using a fixed prompt and seed.
+The template creates a preemptible L40S endpoint from the published Sana serving image. It exposes a readiness route and an OpenAI-shaped image-generation route that returns base64-encoded image data.
 
-The default is the Apache-2.0 Sana Diffusers checkpoint. Changing `MODEL_ID` can change the applicable model license.
+## Setup
 
-## Prerequisites
+Use an existing Nebius project with L40S quota and a selected subnet. Review the published container reference and every pre-filled resource before creation. Configure token authentication before shared or production use.
 
-- A Nebius project with L40S quota and selected networking
-- Docker only if you want to rebuild the supplied image
-- Python 3.10 or newer for verification
-- Optional `HF_TOKEN` for authenticated Hub downloads
+## Run it
 
-## Deploy
+Open the linked recipe, launch the pre-filled endpoint, and wait for its readiness route rather than relying only on the resource state. Submit the documented seeded image-generation request, decode the response, and inspect the resulting image.
 
-Open the [Sana project folder](https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/sana-endpoint) and click **Deploy on Nebius**. The link pre-fills the tested image `cr.eu-north1.nebius.cloud/e00gw2b7v3pxetvpy7/sana-serve:d315ae1`, port 8000, the L40S preset, a 500 GiB disk, 16 GiB shared memory, and preemptible capacity.
+The linked video shows the general Serverless Endpoint deployment workflow. It is not a Sana-specific benchmark or performance claim.
 
-To publish an image you control:
+## Verify and clean up
 
-```bash
-docker build -t your-registry.example/sana-serve:1 .
-docker push your-registry.example/sana-serve:1
-```
+Success means the live API returns decodable image data with the expected file format. Visual inspection is still required; a valid image file alone does not establish prompt quality. Record only observed cost and timing, then delete the endpoint after the test.
 
-## Verify
+## Next steps
 
-```bash
-cd sana-endpoint
-export BASE_URL="https://your-endpoint.example"
-export API_TOKEN="your-endpoint-token" # only if authentication is enabled
-python3 scripts/verify.py
-```
-
-The verifier waits for `/v1/models`, submits a seeded 1024×1024 request, checks the PNG signature, and writes `sana.png` plus `run-report.json`. A successful report contains `"status": "passed"`.
-
-The [Nebius Academy deployment video](https://www.youtube.com/watch?v=Ftr-6JF08ZI) explains the common Serverless Endpoint workflow rather than Sana internals.
-
-## Security and troubleshooting
-
-Enable token authentication before exposing this endpoint for production. Supply credentials through `API_TOKEN` and `HF_TOKEN`, never through committed files.
-
-- `502`: wait for model loading and poll `/v1/models`.
-- `no CUDA device`: confirm the GPU platform and preset.
-- Black output: keep the text encoder and VAE in bf16 as implemented by `serve.py`.
-- Invalid size: both sides must be between 256 and 2048 and divisible by 32.
-
-## Clean up
-
-```bash
-export ENDPOINT_ID="endpoint-..."
-bash scripts/cleanup.sh
-```
-
-Delete the endpoint immediately after collecting the verification artifact and run report.
+Before accepting user traffic, add input limits, moderation, timeouts, authentication, logging, and a retention policy for generated media.

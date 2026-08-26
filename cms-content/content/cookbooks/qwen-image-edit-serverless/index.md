@@ -5,11 +5,11 @@ slug: "qwen-image-edit-serverless"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "A reproducible Qwen Image Edit Serverless endpoint with deterministic input and output checks. Live cost and timing evidence, a media-capable eval adapter, and a schema-compatible Nebius-owned exact-model reference are required before publication."
-github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/qwen-image-edit-endpoint"
+internal_content_description: "CMS adaptation of the existing Qwen-Image-Edit-2511 one-click endpoint template in nebius/serverless-ai-cookbook. Live H100 and image-edit validation, a media-capable Serverless evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
+github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-qwen-image-edit-2511"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Edit images with Qwen on Serverless"
-catalog_card_description: "Deploy Qwen Image Edit as a Serverless API, submit an image and instruction, verify the PNG result, and remove the endpoint afterward."
+catalog_card_description: "Deploy Qwen Image Edit from a one-click template, upload an image with an instruction, and save the edited result."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: null
@@ -21,41 +21,28 @@ sort: 130
 
 # Edit images with Qwen on Serverless
 
-## What you will build
+Deploy [Qwen-Image-Edit-2511](https://huggingface.co/Qwen/Qwen-Image-Edit-2511) with vLLM-Omni using the existing Nebius one-click template. Once ready, the endpoint accepts an image and a natural-language edit instruction.
 
-This project deploys `Qwen/Qwen-Image-Edit-2511` with the vLLM Omni image on Nebius AI Serverless. It accepts multipart requests at `POST /v1/images/edits` and returns an edited PNG image.
+> **Why this matters for Serverless:** A large image-editing model can run as an on-demand API in your Nebius project without writing a separate serving application.
 
-The linked folder includes deployment settings, a deterministic input-image generator, an endpoint verifier, tests, CI, troubleshooting guidance, and cleanup commands. That makes it suitable for a repeatable launch demo and later regression testing.
+## What you'll deploy
 
-## Before you begin
+The template runs `vllm/vllm-omni:v0.24.0` with one preemptible H100 and serves the model on port 8000. Image editing uses multipart `POST /v1/images/edits`; the response contains base64-encoded image data.
 
-You need a Nebius project, the Nebius CLI, permission to create Serverless endpoints, and an API token for authenticated requests. The documented configuration uses one NVIDIA H100 GPU and the container image `vllm/vllm-omni:v0.24.0`.
+## Setup
 
-Review current prices before creating the endpoint. Image-generation models can have long cold starts and high memory requirements, so keep the verification request deliberately small.
+Use an existing Nebius project with H100 quota and appropriate networking. Review the GPU, disk, shared-memory, preemptible-capacity, and container settings before creation. Enable token authentication before shared use.
 
-## Deploy
+## Run it
 
-Open the linked folder and follow the README. Use its deployment link or equivalent CLI configuration, set the model identifier, mount any required model-cache volume, and wait until the endpoint is healthy.
+Open the linked template, create the endpoint, and poll `GET /v1/models` until the API is actually ready. Then run the recipe's multipart example with its included sample image and save the decoded PNG response.
 
-Do not expose the endpoint without authentication. For shared environments, use scoped identities and separate launch-test resources from production.
+The linked video covers the common Serverless Endpoint workflow, not this model's image quality or resource requirements.
 
-## Verify the result
+## Verify and clean up
 
-The verifier creates a simple PPM source image locally, submits it with a short edit instruction, saves the returned PNG, validates its signature and dimensions, and writes a JSON report. This avoids relying on an external copyrighted sample image.
+Success means the API returns decodable PNG data and the saved file opens as an image. Inspect the edit itself because transport checks do not prove semantic quality. Record only observed cost and timing, then delete the endpoint.
 
-Inspect the generated image as a qualitative check. Automated validation confirms transport and file integrity; it does not prove that every edit instruction will produce a semantically correct result.
+## Next steps
 
-## Production considerations
-
-- Enforce image dimensions, MIME types, payload limits, and timeouts.
-- Strip unnecessary image metadata and scan uploaded files.
-- Add moderation and retention policies suitable for user-provided images.
-- Track latency, failure rate, GPU saturation, and cold-start behavior.
-
-## Troubleshooting
-
-If the container does not become ready, inspect logs for incompatible CUDA, insufficient GPU memory, model-download errors, or an incorrect model identifier. If requests fail, check multipart field names, authentication, timeout settings, and the `/v1/images/edits` path.
-
-## Clean up
-
-Delete the endpoint, any dedicated model-cache storage, and other test-only resources after verification. Confirm in the Nebius Console that no launch-test endpoint remains active.
+Before handling user uploads, add authentication, MIME and size checks, request limits, timeouts, moderation, metadata handling, and a media-retention policy.

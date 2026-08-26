@@ -1,13 +1,15 @@
 # CMS content drafts
 
-This directory keeps the CMS source files for the six Serverless AI launch projects in this repository.
+This directory contains the source records to copy into Daniel's manifest repository after review.
 
-Each cookbook has the canonical three-file set:
+Each cookbook has the required three-file contract:
 
-- `index.md`: metadata and website content
-- `prompt.md`: copyable one-shot build prompt
-- `eval.json`: internal evaluation contract
+- `index.md`: catalog metadata and the rendered recipe page
+- `prompt.md`: a short instruction for a coding agent to set up and run the linked recipe
+- `eval.json`: internal evaluation metadata
 
-These entries are intentionally marked `in_review`. Their cost, time-to-first-run, and verification timestamps must remain empty until a controlled live Nebius run supplies measured evidence.
+Five entries link directly to existing directories in `nebius/serverless-ai-cookbook`. SmolVLA links to the new template in this repository.
 
-Only the authored source records are stored here. Generated CMS manifests and files from any external repository are not included.
+All entries intentionally remain `in_review`. The current evaluator only supports text-only Token Factory targets and cannot provision Nebius Serverless resources, so these evals remain disabled. Cost, timing, publication dates, and verification timestamps remain empty until the CMS contract supports Serverless evaluation and controlled live runs provide evidence.
+
+No generated Directus files from Daniel's repository are stored here.

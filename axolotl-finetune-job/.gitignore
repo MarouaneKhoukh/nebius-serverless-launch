@@ -1,5 +1,0 @@
-.env
-__pycache__/
-*.pyc
-download/
-run-report.json

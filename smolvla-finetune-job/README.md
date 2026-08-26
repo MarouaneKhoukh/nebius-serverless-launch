@@ -1,81 +1,162 @@
-# Fine-tune SmolVLA on Nebius Serverless Jobs
+---
+title: Fine-tune SmolVLA in a Nebius Serverless Job
+category: robotics
+type: job
+runtime: nebius-ai-jobs
+frameworks:
+  - smolvla
+  - lerobot
+keywords:
+  - physical-ai
+  - smolvla
+  - robotics
+  - fine-tuning
+difficulty: intermediate
+---
 
-Run a 50-step physical-AI smoke fine-tune of `lerobot/smolvla_base` on the public `lerobot/svla_so100_pickplace` dataset with a Nebius Serverless L40S job. No robot or local GPU is required: this validates the cloud training and checkpoint path, not behavior on physical hardware.
+# Fine-tune SmolVLA in a Nebius Serverless Job
 
-[![Create job on Nebius](https://img.shields.io/badge/Create_job_on-Nebius-6C47FF?style=for-the-badge)](https://console.nebius.com/serverless/job/create?image=ghcr.io%2Fastral-sh%2Fuv%3Apython3.12-bookworm-slim&command=apt-get%20update%20%26%26%20apt-get%20install%20-y%20--no-install-recommends%20git%20ca-certificates%20ffmpeg%20%26%26%20rm%20-rf%20%2Fvar%2Flib%2Fapt%2Flists%2F*%20%26%26%20git%20clone%20https%3A%2F%2Fgithub.com%2Fhuggingface%2Flerobot.git%20%2Fworkspace%2Flerobot%20%26%26%20git%20-C%20%2Fworkspace%2Flerobot%20checkout%20bf31dd794ffb4f87380aba3912f64421e8352d3c%20%26%26%20cd%20%2Fworkspace%2Flerobot%20%26%26%20uv%20pip%20install%20--system%20-e%20'.%5Bsmolvla%2Ctraining%5D'%20%26%26%20export%20RUN_ID%3Drun-%24(date%20%2B%25Y%25m%25d-%25H%25M%25S)%20%26%26%20lerobot-train%20--policy.path%3Dlerobot%2Fsmolvla_base%20--dataset.repo_id%3Dlerobot%2Fsvla_so100_pickplace%20--batch_size%3D1%20--steps%3D50%20--num_workers%3D0%20--output_dir%3D%2Fworkspace%2Flocal-output%2F%24RUN_ID%20--job_name%3Dsmolvla-serverless-smoke%20--policy.device%3Dcuda%20--wandb.enable%3Dfalse%20%26%26%20mkdir%20-p%20%2Fworkspace%2Foutput%2F%24RUN_ID%20%26%26%20cp%20-r%20%2Fworkspace%2Flocal-output%2F%24RUN_ID%2F.%20%2Fworkspace%2Foutput%2F%24RUN_ID&platform=gpu-l40s-a&preset=1gpu-24vcpu-96gb&volume=%2Fworkspace%2Foutput&diskSize=500Gi&shmSize=16Gi&preemptible=true)
+<!-- factory:deploy -->
 
-The form pre-fills the base image, pinned LeRobot source revision, official dataset, bounded smoke command, L40S preset, bucket mount path, disk, shared memory, and preemptible capacity. Select a Nebius project, networking, and a writable Object Storage bucket mounted at `/workspace/output` before creating the job.
+<a href="https://console.nebius.com/serverless/job/create?image=huggingface%2Flerobot-gpu%40sha256%3Adb28375428aa330d2ffac1e0e58ed586041c15e9415df100f9fe0946789d6085&amp;command=RUN_ID%3Dsmolvla-%24%28date%20%2B%25Y%25m%25d-%25H%25M%25S%29%20%26%26%20hf%20download%20lerobot%2Fsmolvla_base%20--revision%20c83c3163b8ca9b7e67c509fffd9121e66cb96205%20--local-dir%20%2Ftmp%2Fsmolvla-base%20%26%26%20lerobot-train%20--policy.path%3D%2Ftmp%2Fsmolvla-base%20--dataset.repo_id%3Dlerobot%2Fsvla_so100_pickplace%20--dataset.revision%3D728583b5eaf9e739a7f119e2def466fa1d552402%20--batch_size%3D1%20--steps%3D50%20--num_workers%3D1%20--seed%3D42%20--log_freq%3D1%20--save_freq%3D50%20--env_eval_freq%3D0%20--eval_steps%3D0%20--output_dir%3D%2Ftmp%2F%24RUN_ID%20--job_name%3Dsmolvla-serverless-smoke%20--policy.device%3Dcuda%20--policy.push_to_hub%3Dfalse%20--wandb.enable%3Dfalse%20%26%26%20mkdir%20-p%20%2Fworkspace%2Foutput%2F%24RUN_ID%20%26%26%20cp%20-r%20%2Ftmp%2F%24RUN_ID%2F.%20%2Fworkspace%2Foutput%2F%24RUN_ID&amp;platform=gpu-l40s-a&amp;preset=1gpu-8vcpu-32gb&amp;volume=%2Fworkspace%2Foutput&amp;diskSize=500Gi&amp;shmSize=16Gi&amp;preemptible=true"><img src="https://img.shields.io/badge/Create_job_on-Nebius-6C47FF?style=for-the-badge" alt="Create job on Nebius"></a>
 
-## Why this fits the launch
+<!-- /factory:deploy -->
 
-This is a one-click, reproducible Serverless Job for a physical-AI workload. It demonstrates Hub dataset acquisition, GPU fine-tuning, checkpoint persistence, verification, and cleanup. The 50-step budget is deliberately a pipeline smoke test; it does not establish manipulation quality, convergence, or hardware readiness.
+<!-- factory:intro -->
 
-The original NormaCore cookbook route was adapted because its external SO-101 Parquet URL currently returns an HTTP 500. This repository instead uses the public, Apache-2.0 dataset referenced by the official SmolVLA documentation, eliminating that broken dependency while preserving the physical-AI job story.
+Run a 50-step SmolVLA fine-tuning smoke test on a preemptible L40S and persist the completed LeRobot checkpoint in Nebius Object Storage.
 
-## Job contract
+**Model and dataset licenses:** Apache-2.0 · **Training framework:** [Hugging Face LeRobot](https://github.com/huggingface/lerobot)
+
+<!-- /factory:intro -->
+
+> **Validation status:** The repository's offline contract tests pass. A real Nebius L40S run has not yet been completed, so this draft makes no deployment, runtime, cost, convergence, or model-quality claim.
+
+## What this job proves
+
+The bounded run is designed to check the cloud pipeline: GPU provisioning, pinned model and dataset downloads, LeRobot startup, 50 optimizer steps, checkpoint creation, and Object Storage persistence.
+
+It does not establish manipulation quality or safe behavior on a physical robot. Hardware use requires separate simulation and controlled-lab evaluation.
+
+## Job configuration
 
 | Setting | Value |
 | --- | --- |
-| Base checkpoint | `lerobot/smolvla_base` |
-| Training code | `huggingface/lerobot` commit `bf31dd794ffb4f87380aba3912f64421e8352d3c` |
-| Dataset | `lerobot/svla_so100_pickplace`, revision `728583b5eaf9e739a7f119e2def466fa1d552402` at authoring time |
-| Smoke budget | 50 steps, batch size 1 |
-| Base image | `ghcr.io/astral-sh/uv:python3.12-bookworm-slim` |
-| Compute | `gpu-l40s-a`, `1gpu-24vcpu-96gb` |
-| Disk / shared memory | `500Gi` / `16Gi` |
-| Persistent output | `/workspace/output/run-YYYYmmdd-HHMMSS/` |
+| Container | `huggingface/lerobot-gpu@sha256:db28375428aa330d2ffac1e0e58ed586041c15e9415df100f9fe0946789d6085` |
+| Base policy | `lerobot/smolvla_base` at `c83c3163b8ca9b7e67c509fffd9121e66cb96205` |
+| Dataset | `lerobot/svla_so100_pickplace` at `728583b5eaf9e739a7f119e2def466fa1d552402` |
+| Training bound | 50 steps, batch size 1, seed 42 |
+| Compute | `gpu-l40s-a` / `1gpu-8vcpu-32gb`, preemptible |
+| Container disk | 500 GiB |
+| Shared memory | 16 GiB |
+| Timeout | 1 hour in the CLI helper |
+| Output mount | writable bucket at `/workspace/output` |
 
-The LeRobot source is pinned so code and dependency constraints do not drift. The dataset is downloaded from the Hugging Face Hub by `lerobot-train`. Training writes to local job disk, and only completed output is copied to the mounted bucket.
+The container digest was resolved from Hugging Face's official GPU image on 2026-08-26. Pinning the digest prevents a nightly image update from silently changing this draft.
+
+## Prerequisites
+
+- An existing Nebius project and configured Nebius CLI
+- L40S, VM, and networking quota
+- A subnet with outbound HTTPS access to Hugging Face
+- A writable Nebius Object Storage bucket
+- Current Serverless pricing reviewed before creation
+
+The model and dataset are public. If Hugging Face rate limits anonymous downloads, configure `HF_TOKEN` through Nebius secret management rather than placing it in this repository or the deploy URL.
+
+## One-click path
+
+Click **Create job on Nebius**, then:
+
+1. Select your existing project and subnet.
+2. Attach a writable Object Storage bucket at `/workspace/output`.
+3. Confirm the pinned image, L40S preset, 50-step command, disk, shared memory, timeout, and preemptible setting.
+4. Review the current estimated charge and create the job only when you are ready.
+5. Follow the job logs until training and the final copy complete.
 
 ## CLI path
 
-Create a bucket and export its resource ID:
+Copy `.env.example` to `.env` without committing it, then set the bucket and subnet resource IDs:
 
 ```bash
-nebius storage bucket create --name your-unique-smolvla-bucket
-export BUCKET_ID="$(nebius storage bucket get-by-name --name your-unique-smolvla-bucket --format json | jq -r '.metadata.id')"
+export BUCKET_ID="storagebucket-..."
+export SUBNET_ID="vpcsubnet-..."
 bash scripts/create_job.sh
 ```
 
-The bucket is IAM-mounted; no Object Storage secret is placed in the job command. `HF_TOKEN` is optional for the public model and dataset. If anonymous Hub access is throttled, pass the token with Nebius secret management.
-
-## Verify the checkpoint
-
-After the job completes, download one run folder and verify it:
+The helper prints the job response. Save its job ID and follow logs:
 
 ```bash
-nebius ai job logs JOB_ID --follow
-aws s3 cp --recursive s3://YOUR_BUCKET/RUN_ID ./download/RUN_ID
-export ARTIFACT_DIR="$PWD/download/RUN_ID"
-export JOB_ID='job-...'
-export JOB_RUNTIME_SECONDS='...' # optional measured job value
-export HOURLY_RATE_USD='...'      # optional current rate
+export JOB_ID="job-..."
+nebius ai logs "$JOB_ID" --follow
+```
+
+<!-- factory:cli -->
+
+The helper submits the equivalent `nebius ai job create` command with the configuration shown above. Inspect [`scripts/create_job.sh`](scripts/create_job.sh) before running it.
+
+<!-- /factory:cli -->
+
+## Expected artifact
+
+After a successful run, the mounted bucket should contain a timestamped directory such as:
+
+```text
+smolvla-YYYYmmdd-HHMMSS/
+└── checkpoints/
+    └── last/
+        ├── pretrained_model/
+        │   ├── config.json
+        │   └── model.safetensors
+        └── train_config.json
+```
+
+The exact checkpoint directory label is controlled by LeRobot. Verification searches the downloaded run directory rather than assuming a single fixed nesting level.
+
+## Verify
+
+Download one completed run directory from Object Storage, then point the offline verifier at it:
+
+```bash
+export ARTIFACT_DIR="$PWD/artifacts/smolvla-YYYYmmdd-HHMMSS"
+export JOB_ID="job-..."                 # optional report context
+export JOB_RUNTIME_SECONDS="..."        # optional observed value
+export HOURLY_RATE_USD="..."            # optional current rate you supplied
 python3 scripts/verify.py
 ```
 
-The verifier requires at least one non-empty model `.safetensors` file and a saved training configuration, then writes `run-report.json`. No runtime, cost, or quality number is fabricated.
-
-[Nebius Academy: How to finetune a model using Nebius Serverless Jobs](https://www.youtube.com/watch?v=ZjD489E0lls) explains the same platform workflow; it is a general fine-tuning walkthrough rather than a SmolVLA-specific demo. The [official SmolVLA guide](https://huggingface.co/docs/lerobot/smolvla) documents the model and `lerobot-train` interface.
+The verifier requires a non-empty `.safetensors` file and `train_config.json`. It checks the model, dataset revision, step count, batch size, and seed recorded in that configuration and writes `run-report.json`.
 
 ## Troubleshooting
 
-- `CUDA required` or CPU fallback: confirm the L40S GPU platform and `--policy.device=cuda`.
-- Video decoding fails: the job installs `ffmpeg`; retain that package and the `training` extra.
-- Hub throttling: provide `HF_TOKEN` through Nebius secret handling.
-- No persisted checkpoint: confirm the bucket is mounted writable at `/workspace/output`; the final copy runs only after successful training.
-- Preemption: resubmit or choose regular capacity; this changes cost.
+- **Image pull or startup failure:** confirm the pinned image digest is still available to the selected region.
+- **Model or dataset download failure:** confirm outbound HTTPS access; use a managed `HF_TOKEN` only if anonymous access is throttled.
+- **CUDA unavailable:** confirm `gpu-l40s-a` and the one-GPU preset.
+- **Training configuration rejected:** keep the pinned image and command together; LeRobot CLI fields can change between releases.
+- **No checkpoint in the bucket:** confirm the bucket is mounted writable at `/workspace/output` and inspect the final job log lines.
+- **Preemption:** resubmit or choose regular capacity after reviewing the price difference.
 
-## Cleanup
+## Clean up
+
+Delete the completed job when you no longer need it:
 
 ```bash
-export JOB_ID='job-...'
+export JOB_ID="job-..."
 bash scripts/cleanup.sh
 ```
 
-The script deletes only the GPU job. Review the checkpoint and evidence, then remove Object Storage artifacts separately when they are no longer needed.
+The cleanup helper deletes only the specified job. Review the saved checkpoint first, then remove test-only bucket objects or the bucket separately if you no longer need them.
 
-Run `bash scripts/check.sh` for free local checks. A paid L40S run is still required before marking the eventual CMS entry as live-validated.
+## Local checks
 
-## License and provenance
+```bash
+bash scripts/check.sh
+```
 
-Project code and documentation are Apache-2.0. Upstream code, model, and dataset artifacts retain their own licenses; see [ATTRIBUTION.md](ATTRIBUTION.md).
+These checks require no Nebius credentials, network access, GPU, or paid resources.
+
+## Safety and provenance
+
+A 50-step training run is pipeline validation only. Before using a policy on hardware, evaluate it in simulation and a controlled environment with supervision, motion and force limits, emergency stops, and a rollback plan.
+
+See [ATTRIBUTION.md](ATTRIBUTION.md) for upstream sources and pinned revisions.

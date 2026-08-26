@@ -1,6 +1,0 @@
-.env
-__pycache__/
-*.pyc
-qwen-edit-input.ppm
-qwen-edit.png
-run-report.json

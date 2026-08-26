@@ -2,22 +2,15 @@
   "$schema": "../../../schemas/prompt-eval.schema.json",
   "schema_version": "1.0.0",
   "enabled": false,
-  "agent": {"runner": "codex", "model": "gpt-5.6-terra", "cli_version": "0.149.1", "api_key_env": "OPENAI_API_KEY", "timeout_seconds": 1200},
+  "agent": {
+    "runner": "codex",
+    "model": "gpt-5.6-terra",
+    "cli_version": "0.149.1",
+    "api_key_env": "OPENAI_API_KEY",
+    "timeout_seconds": 1200
+  },
   "execution": null,
   "target": null,
   "thresholds": null,
-  "checks": [
-    {"id": "server", "type": "path_exists", "path": "serve.py", "kind": "file"},
-    {"id": "dockerfile", "type": "path_exists", "path": "Dockerfile", "kind": "file"},
-    {"id": "verifier", "type": "path_exists", "path": "scripts/verify.py", "kind": "file"},
-    {"id": "tests", "type": "path_exists", "path": "tests", "kind": "directory"},
-    {
-      "id": "api-contract",
-      "type": "text",
-      "path": "serve.py",
-      "contains": ["/v1/models", "/v1/images/generations", "MAX_IMAGES", "MAX_STEPS", "torch.bfloat16"],
-      "not_contains": ["sk-", "TODO", "TBD"]
-    },
-    {"id": "local-checks", "type": "command", "argv": ["bash", "scripts/check.sh"], "timeout_seconds": 180}
-  ]
+  "checks": []
 }

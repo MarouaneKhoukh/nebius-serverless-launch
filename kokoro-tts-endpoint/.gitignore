@@ -1,5 +1,0 @@
-.env
-__pycache__/
-*.pyc
-kokoro-sample.mp3
-run-report.json

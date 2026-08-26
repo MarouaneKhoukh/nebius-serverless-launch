@@ -1,53 +1,37 @@
-# Nebius Serverless launch projects
+# Nebius Serverless launch content
 
-Six self-contained, one-click examples for a Nebius Serverless AI launch: four inference endpoints and two GPU fine-tuning jobs.
+This repository stages six Serverless AI cookbook records for the Nebius developer-hub CMS. It does not duplicate Serverless examples that already exist.
 
-| Project | Type | Compute | Walkthrough |
-| --- | --- | --- | --- |
-| [Qwen3-0.6B](qwen3-endpoint/) | OpenAI-compatible chat endpoint | L40S | [Deploy video](https://www.youtube.com/watch?v=Ftr-6JF08ZI) |
-| [Sana](sana-endpoint/) | Text-to-image endpoint | L40S | [Deploy video](https://www.youtube.com/watch?v=Ftr-6JF08ZI) |
-| [Kokoro-82M](kokoro-tts-endpoint/) | Text-to-speech endpoint | L40S | [Deploy video](https://www.youtube.com/watch?v=Ftr-6JF08ZI) |
-| [Qwen Image Edit](qwen-image-edit-endpoint/) | Image-edit endpoint | H100 | [Deploy video](https://www.youtube.com/watch?v=Ftr-6JF08ZI) |
-| [Axolotl + Qwen2.5](axolotl-finetune-job/) | QLoRA fine-tuning job | H100 | [Fine-tune video](https://www.youtube.com/watch?v=ZjD489E0lls) |
-| [SmolVLA](smolvla-finetune-job/) | Physical-AI fine-tuning job | L40S | [Fine-tune video](https://www.youtube.com/watch?v=ZjD489E0lls) |
+| CMS recipe | Runtime source |
+| --- | --- |
+| Qwen3-0.6B endpoint | [Official Serverless template](https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-vllm-qwen3-0-6b) |
+| Sana endpoint | [Official Serverless template](https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-sana) |
+| Kokoro-82M endpoint | [Official Serverless template](https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-kokoro-82m) |
+| Qwen Image Edit endpoint | [Official Serverless template](https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-qwen-image-edit-2511) |
+| Axolotl fine-tuning job | [Official Serverless template](https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/job-axolotl-finetune) |
+| SmolVLA physical-AI job | [New template in this repository](smolvla-finetune-job/) |
 
-Each folder is independently documented and includes:
+The five existing recipes contribute only the CMS source required by Daniel's manifest repository: `index.md`, `prompt.md`, and `eval.json`. The prompt tells a coding agent to set up and run the linked recipe; it does not ask the agent to recreate that recipe.
 
-- a pre-filled Nebius console launch link and CLI alternative;
-- pinned models, images, or upstream source revisions;
-- a bounded smoke test with explicit success criteria;
-- a machine-readable evidence report without invented cost or runtime figures;
-- environment-variable or managed-secret credential handling;
-- troubleshooting, cleanup, licensing, and attribution;
-- local tests run by the repository-level CI workflow.
+SmolVLA is the only new runtime example. It adapts the existing physical-AI material into a one-click Nebius Serverless Job using Hugging Face's official GPU image, model, dataset, and LeRobot training command.
 
-## Validate everything locally
-
-```bash
-for project in \
-  qwen3-endpoint \
-  sana-endpoint \
-  kokoro-tts-endpoint \
-  qwen-image-edit-endpoint \
-  axolotl-finetune-job \
-  smolvla-finetune-job
-do
-  (cd "$project" && bash scripts/check.sh)
-done
-```
-
-These checks do not allocate Nebius resources. A live endpoint or training job consumes paid GPU capacity; run the project-specific verifier afterward and keep its `run-report.json` as publication evidence.
-
-## CMS links
-
-Each catalog item can use its folder URL as `github_url`, for example:
+## Repository layout
 
 ```text
-https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/qwen3-endpoint
+cms-content/              Six CMS source records plus author/category references
+smolvla-finetune-job/     New one-click physical-AI Serverless Job template
+scripts/check_content.py  Free, offline content validation
 ```
 
-This preserves one reviewable repository while keeping every launch item addressable as a distinct project.
+## Validate locally
+
+```bash
+python3 scripts/check_content.py
+(cd smolvla-finetune-job && bash scripts/check.sh)
+```
+
+These checks use no credentials, network, GPU, or paid Nebius resources. All six entries remain `in_review`; cost, time-to-first-run, and deployment evidence stay empty until controlled live runs establish them.
 
 ## License
 
-Repository-authored code and documentation are Apache-2.0. Each project folder includes precise upstream attribution. Models, datasets, and external source code retain their upstream licenses.
+Repository-authored material is Apache-2.0. Linked templates, models, datasets, images, and upstream code retain their respective licenses.

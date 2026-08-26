@@ -12,18 +12,5 @@
   "execution": null,
   "target": null,
   "thresholds": null,
-  "checks": [
-    {"id": "server", "type": "path_exists", "path": "serve.py", "kind": "file"},
-    {"id": "dockerfile", "type": "path_exists", "path": "Dockerfile", "kind": "file"},
-    {"id": "verifier", "type": "path_exists", "path": "scripts/verify.py", "kind": "file"},
-    {"id": "tests", "type": "path_exists", "path": "tests", "kind": "directory"},
-    {
-      "id": "speech-contract",
-      "type": "text",
-      "path": "README.md",
-      "contains": ["hexgrad/Kokoro-82M", "/v1/audio/speech", "mp3", "wav", "L40S"],
-      "not_contains": ["sk-", "TODO", "TBD"]
-    },
-    {"id": "local-checks", "type": "command", "argv": ["bash", "scripts/check.sh"], "timeout_seconds": 180}
-  ]
+  "checks": []
 }

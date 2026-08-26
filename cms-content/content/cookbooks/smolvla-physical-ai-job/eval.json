@@ -12,18 +12,5 @@
   "execution": null,
   "target": null,
   "thresholds": null,
-  "checks": [
-    {"id": "job-script", "type": "path_exists", "path": "scripts/create_job.sh", "kind": "file"},
-    {"id": "verifier", "type": "path_exists", "path": "scripts/verify.py", "kind": "file"},
-    {"id": "cleanup", "type": "path_exists", "path": "scripts/cleanup.sh", "kind": "file"},
-    {"id": "tests", "type": "path_exists", "path": "tests", "kind": "directory"},
-    {
-      "id": "physical-ai-contract",
-      "type": "text",
-      "path": "README.md",
-      "contains": ["lerobot/svla_so100_pickplace", "SmolVLA", "50", "L40S", "physical robot"],
-      "not_contains": ["sk-", "TODO", "TBD"]
-    },
-    {"id": "local-checks", "type": "command", "argv": ["bash", "scripts/check.sh"], "timeout_seconds": 180}
-  ]
+  "checks": []
 }

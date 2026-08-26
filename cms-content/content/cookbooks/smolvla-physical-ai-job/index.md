@@ -5,11 +5,11 @@ slug: "smolvla-physical-ai-job"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "An adapted physical-AI training template using official LeRobot assets because the original external dataset endpoint is unavailable. Live cost and timing evidence, a Serverless-job eval adapter, and a schema-compatible Nebius-owned exact-model reference are required before publication."
+internal_content_description: "CMS entry for the new SmolVLA one-click job template staged in MarouaneKhoukh/nebius-serverless-launch. The official LeRobot GPU image is pinned by digest and the model and dataset revisions are pinned. A real L40S run, a Serverless-job evaluator, a compatible model record, and measured cost and time-to-first-run are required before publication."
 github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/smolvla-finetune-job"
 video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
-catalog_card_title: "Fine-tune SmolVLA for physical AI in a GPU job"
-catalog_card_description: "Run a short SmolVLA fine-tune with LeRobot on Nebius, validate the saved checkpoint, and learn where simulation ends and robot testing begins."
+catalog_card_title: "Fine-tune SmolVLA in a Serverless Job"
+catalog_card_description: "Run a bounded SmolVLA physical-AI fine-tune on an L40S and preserve the checkpoint in Object Storage."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: null
@@ -19,40 +19,30 @@ published_at: null
 sort: 150
 ---
 
-# Fine-tune SmolVLA for physical AI in a GPU job
+# Fine-tune SmolVLA in a Serverless Job
 
-## What you will build
+Run a bounded fine-tuning smoke test of Hugging Face's [SmolVLA](https://huggingface.co/lerobot/smolvla_base) physical-AI policy on the public [SO-100 pick-and-place dataset](https://huggingface.co/datasets/lerobot/svla_so100_pickplace). The new template uses an official LeRobot GPU image and persists its checkpoint in Nebius Object Storage.
 
-This physical-AI project runs a short SmolVLA fine-tuning job with Hugging Face LeRobot on Nebius. It uses the public `lerobot/svla_so100_pickplace` dataset, performs 50 training steps with batch size 1, persists the checkpoint, and validates the expected files.
+> **Why this matters for Serverless:** Robotics training can use cloud GPUs without requiring a robot or local GPU during the pipeline test. The result is a checkpoint—not evidence that a policy is safe or effective on hardware.
 
-The source template was adapted because its original external Parquet endpoint is unavailable. This version uses the official LeRobot training interface, pins the LeRobot source revision, and records the dataset revision used when the recipe was authored.
+## What you'll run
 
-## What this demo proves
+The template starts one preemptible L40S, downloads pinned model and dataset revisions, and runs 50 training steps with batch size 1 and a fixed seed. It saves the final LeRobot checkpoint to a bucket mounted at `/workspace/output`.
 
-The job verifies that Nebius can provision the GPU workload, load the robotics dataset, run the training loop, and preserve a SmolVLA checkpoint. No physical robot is required for the cloud smoke test.
+## Setup
 
-It does not prove safe or reliable real-world robot behavior. Before deployment on hardware, evaluate the policy in simulation and a controlled lab with human supervision, limits, emergency stops, and a documented rollback procedure.
+Use an existing Nebius project with L40S quota, a subnet, and a writable Object Storage bucket. Review the pinned container digest, model revision, dataset revision, training bounds, timeout, storage mount, and current pricing before starting the job.
 
-## Before you begin
+## Run it
 
-You need a Nebius project, the Nebius CLI, permission to create GPU jobs, and Object Storage for the output. The reference configuration uses one NVIDIA L40S GPU and pins LeRobot to commit `bf31dd794ffb4f87380aba3912f64421e8352d3c`.
+Open the linked recipe and use its pre-filled **Create Job** link or CLI helper. Select the project, network, and bucket, start the job, and follow its logs through model download, dataset loading, 50 training steps, checkpoint creation, and output copy.
 
-The dataset revision recorded at authoring time is `728583b5eaf9e739a7f119e2def466fa1d552402`. Confirm the dataset license, access, and revision before running the job.
+The linked video explains the general Serverless Jobs fine-tuning workflow. It is not evidence of SmolVLA convergence or robot performance.
 
-## Run and monitor
+## Verify and clean up
 
-Follow the linked README to configure the scoped identity and output storage, submit the job, and monitor logs. The command uses the official LeRobot training CLI with a fixed seed, 50 steps, and batch size 1 to bound the launch test.
+Success means the job completes and Object Storage contains a LeRobot training configuration and non-empty model weights. The included verifier checks those artifacts without making quality claims. Record cost and runtime only from the live job, then remove the job and any test-only artifacts you no longer need.
 
-The job copies the completed checkpoint to Object Storage only after training succeeds. Keep logs and the verifier report together with the artifact so later reviewers can trace how it was produced.
+## Next steps
 
-## Verify the checkpoint
-
-The included verifier checks that the training directory contains the expected policy configuration and non-empty model weights, validates important metadata, and creates a machine-readable report. Unit tests exercise this logic without a GPU.
-
-## Troubleshooting
-
-For dataset errors, confirm the repository identifier, revision, network access, and cache permissions. For memory failures, keep batch size at 1 and verify the L40S resource configuration. If the checkpoint is missing, inspect the final training logs and Object Storage copy step.
-
-## Clean up
-
-Delete the GPU job after collecting its logs and verification report. Remove test-only checkpoints, buckets or prefixes, and dedicated IAM bindings when they are no longer needed.
+Longer training requires task-specific hyperparameters and evaluation. Before using a policy on hardware, validate it in simulation and then in a controlled environment with supervision, motion limits, emergency stops, and a rollback plan.
