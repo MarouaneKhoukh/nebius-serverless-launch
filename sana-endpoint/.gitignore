@@ -1,0 +1,5 @@
+.env
+__pycache__/
+*.pyc
+sana.png
+run-report.json
