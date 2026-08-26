@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schemas/prompt-eval.schema.json",
+  "schema_version": "1.0.0",
+  "enabled": false,
+  "agent": {
+    "runner": "codex",
+    "model": "gpt-5.6-terra",
+    "cli_version": "0.149.1",
+    "api_key_env": "OPENAI_API_KEY",
+    "timeout_seconds": 1200
+  },
+  "execution": null,
+  "target": null,
+  "thresholds": null,
+  "checks": [
+    {"id": "training-config", "type": "path_exists", "path": "config.yaml", "kind": "file"},
+    {"id": "job-script", "type": "path_exists", "path": "scripts/create_job.sh", "kind": "file"},
+    {"id": "verifier", "type": "path_exists", "path": "scripts/verify.py", "kind": "file"},
+    {"id": "tests", "type": "path_exists", "path": "tests", "kind": "directory"},
+    {
+      "id": "training-contract",
+      "type": "text",
+      "path": "README.md",
+      "contains": ["Qwen2.5-0.5B", "30", "QLoRA", "Object Storage", "H100"],
+      "not_contains": ["sk-", "TODO", "TBD"]
+    },
+    {"id": "local-checks", "type": "command", "argv": ["bash", "scripts/check.sh"], "timeout_seconds": 180}
+  ]
+}

@@ -1,0 +1,7 @@
+Create a standalone, production-minded project that deploys `Qwen/Qwen3-0.6B` to a Nebius Serverless Endpoint with the pinned image `vllm/vllm-openai:v0.19.1`. Deliver `README.md`, `.env.example`, `.gitignore`, `LICENSE`, `ATTRIBUTION.md`, `scripts/verify.py`, `scripts/cleanup.sh`, `scripts/check.sh`, unit tests under `tests/`, and a GitHub Actions workflow.
+
+The README must include a Nebius console link that pre-fills `python3 -m vllm.entrypoints.openai.api_server --model Qwen/Qwen3-0.6B --host 0.0.0.0 --port 8000`, container port 8000, platform `gpu-l40s-a`, preset `1gpu-8vcpu-32gb`, a 500 GiB disk, 16 GiB shared memory, and preemptible capacity. Include the equivalent `nebius ai endpoint create` command.
+
+Read the endpoint URL from `BASE_URL` and an optional bearer token from `API_TOKEN`; never print or commit credentials. The verifier must wait for `/v1/models`, submit one deterministic OpenAI-compatible chat request, reject an empty or malformed response, write the reply to `reply.txt`, and write a JSON evidence report with a distinctive `"status": "passed"` marker. Accept an optional `HOURLY_RATE_USD` only to calculate an operator-supplied cost estimate. The cleanup script must require `ENDPOINT_ID` before deleting anything.
+
+Keep tests deterministic and free of network or GPU requirements. Document first-boot readiness, token authentication, verification, troubleshooting, measured-evidence handling, and immediate cleanup. Preserve Apache-2.0 attribution to `nebius/serverless-ai-cookbook`.

@@ -1,0 +1,7 @@
+{
+  "id": "d16892c8-e47e-46bb-8d9b-c838d7e3dfb6",
+  "name": "Serverless AI",
+  "slug": "serverless-ai",
+  "description": "Cookbooks for GPU endpoints and batch jobs on Nebius Serverless AI.",
+  "sort": 30
+}

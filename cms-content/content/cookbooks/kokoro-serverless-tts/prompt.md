@@ -1,0 +1,7 @@
+Create a standalone, production-conscious Nebius AI Serverless project that deploys `hexgrad/Kokoro-82M` as a text-to-speech endpoint.
+
+The project must include a Dockerfile and a Python serving application with an OpenAI-compatible `POST /v1/audio/speech` route. Support MP3 and WAV responses, validate speed bounds, map supported voices and language codes explicitly, install the English grapheme-to-phoneme runtime and `ffmpeg`, and return useful JSON errors for invalid requests. Use the published container image `cr.eu-north1.nebius.cloud/e00gw2b7v3pxetvpy7/kokoro-serve:d315ae1` as the documented default while keeping the source reproducible.
+
+Write a README that covers prerequisites, authentication, image build and push, one-click Nebius Console deployment where supported, an equivalent CLI path, the expected single-L40S resource configuration, health checks, authenticated request examples, logs, security notes, troubleshooting, and explicit cleanup. Never commit credentials or imply that a resource is free.
+
+Add a verification script that calls the deployed endpoint, saves the audio, checks the HTTP status, content type, minimum size, and MP3 or WAV signature, and emits a machine-readable JSON report. Add deterministic unit tests for request validation and response-format handling, plus CI that runs without Nebius credentials or a GPU. Keep cloud smoke testing opt-in through environment variables.

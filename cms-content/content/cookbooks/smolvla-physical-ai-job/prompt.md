@@ -1,0 +1,7 @@
+Create a standalone Nebius AI GPU-job project for a bounded physical-AI training smoke test with SmolVLA and the official Hugging Face LeRobot tooling.
+
+Pin LeRobot to commit `bf31dd794ffb4f87380aba3912f64421e8352d3c`. Use the public dataset `lerobot/svla_so100_pickplace`, record dataset revision `728583b5eaf9e739a7f119e2def466fa1d552402`, use one NVIDIA L40S GPU, batch size 1, a fixed seed, and exactly 50 training steps. Use the official LeRobot training CLI rather than a custom mock training loop. Persist the completed checkpoint to mounted Object Storage only after training succeeds.
+
+The README must explain that the original template's external Parquet source was replaced because it is unavailable. Cover prerequisites, dataset and model licensing, authentication, least-privilege identity setup, storage mounting, job submission, log monitoring, artifact download, checkpoint verification, troubleshooting, price checking, and complete cleanup. Clearly distinguish cloud-pipeline validation from policy-quality evaluation and require simulation plus controlled, supervised hardware tests before any robot deployment.
+
+Add an offline verifier that checks the policy configuration, expected metadata, and non-empty model weights and emits a JSON report. Add deterministic unit tests and credential-free CI. Keep live Nebius execution opt-in, pin material dependencies, and never fabricate successful execution, cost, latency, or robot-safety claims.
