@@ -25,7 +25,7 @@ PLANNING_ESTIMATES = {
     "kokoro-serverless-tts": ("null", "10"),
     "qwen-image-edit-serverless": ("null", "20"),
     "axolotl-qwen-finetune-job": ("0.75", "20"),
-    "smolvla-physical-ai-job": ("0.40", "30"),
+    "smolvla-physical-ai-job": ("null", "null"),
 }
 
 REQUIRED_FRONTMATTER = {
@@ -80,9 +80,11 @@ def main() -> None:
         assert metadata["github_url"] == source
         expected_cost, expected_minutes = PLANNING_ESTIMATES[slug]
         assert metadata["estimated_cost_per_run_usd"] == expected_cost
-        assert metadata["cost_qualifier"] == "approximate"
+        expected_qualifier = "not measured" if slug == "smolvla-physical-ai-job" else "approximate"
+        assert metadata["cost_qualifier"] == expected_qualifier
         assert metadata["time_to_first_run_minutes"] == expected_minutes
-        assert metadata["time_qualifier"] == "approximately"
+        expected_time_qualifier = "not measured" if slug == "smolvla-physical-ai-job" else "approximately"
+        assert metadata["time_qualifier"] == expected_time_qualifier
         assert metadata["metrics_verified_at"] == "null"
         assert metadata["published_at"] == "null"
         assert len(prompt) >= 40

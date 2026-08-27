@@ -1,0 +1,5 @@
+FROM huggingface/lerobot-gpu@sha256:db28375428aa330d2ffac1e0e58ed586041c15e9415df100f9fe0946789d6085
+
+# Nebius bucket mounts are owned by root. The upstream image declares
+# user_lerobot, which can train but cannot write checkpoints to the mount.
+USER root

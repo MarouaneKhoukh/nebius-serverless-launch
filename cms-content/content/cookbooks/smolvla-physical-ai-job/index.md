@@ -5,15 +5,15 @@ slug: "smolvla-physical-ai-job"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "CMS entry for the new SmolVLA one-click job template staged in MarouaneKhoukh/nebius-serverless-launch. The official LeRobot GPU image is pinned by digest and the model and dataset revisions are pinned. A real L40S run, a Serverless-job evaluator, a compatible model record, and measured cost and time-to-first-run are required before publication."
+internal_content_description: "CMS entry for the SmolVLA one-click job template in MarouaneKhoukh/nebius-serverless-launch. A real regular H100 run completed 50 steps and persisted its checkpoint. A Serverless-job evaluator, a compatible model record, and measured cost and time-to-first-run are still required before publication."
 github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/smolvla-finetune-job"
 video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
 catalog_card_title: "SmolVLA fine-tuning for physical AI"
 catalog_card_description: "Run a bounded 50-step SmolVLA training job, preserve its checkpoint, and separate cloud-pipeline proof from robot performance."
-estimated_cost_per_run_usd: 0.40
-cost_qualifier: "approximate"
-time_to_first_run_minutes: 30
-time_qualifier: "approximately"
+estimated_cost_per_run_usd: null
+cost_qualifier: "not measured"
+time_to_first_run_minutes: null
+time_qualifier: "not measured"
 metrics_verified_at: null
 published_at: null
 sort: 150
@@ -29,24 +29,24 @@ A robotics checkpoint is only useful when its provenance is clear. This recipe r
 
 The standalone [SmolVLA project](https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/smolvla-finetune-job) creates a job that:
 
-- starts an official LeRobot GPU image pinned by digest;
+- starts a minimal root wrapper around the official LeRobot GPU image, with both images pinned by digest;
 - downloads pinned revisions of `lerobot/smolvla_base` and `lerobot/svla_so100_pickplace`;
-- trains for 50 steps with batch size 1 and seed 42 on one preemptible L40S;
-- copies the completed run into Object Storage at `/workspace/output/<run-id>`;
+- trains for 50 steps with batch size 1 and seed 42 on one regular H100 SXM;
+- removes generated checkpoint symlinks and copies the completed run into Object Storage at `/tmp/output/<run-id>`;
 - provides an offline verifier and deterministic tests for the artifact contract.
 
 The 50-step bound checks the path from provisioning to persistence. It does not claim convergence or task improvement.
 
 ## Setup
 
-You need a Nebius project, a subnet with outbound HTTPS access, L40S quota, and a writable Object Storage bucket. Clone your repository and enter the project:
+You need a Nebius project, a subnet with outbound HTTPS access, H100 SXM quota, and a writable Object Storage bucket. Clone your repository and enter the project:
 
 ```bash
 git clone https://github.com/MarouaneKhoukh/nebius-serverless-launch.git
 cd nebius-serverless-launch/smolvla-finetune-job
 ```
 
-Review the pinned container, model and dataset revisions, 500 GiB disk, 16 GiB shared memory, one-hour timeout, preemptible capacity, and current price. Then set only the resource IDs for infrastructure you control:
+Review the pinned container, model and dataset revisions, 500 GiB disk, 16 GiB shared memory, one-hour timeout, regular capacity, and current price. Then set only the resource IDs for infrastructure you control:
 
 ```bash
 export BUCKET_ID="storagebucket-..."
@@ -62,8 +62,8 @@ These values make the smoke run reviewable and give the verifier something concr
 | Policy | `lerobot/smolvla_base` at `c83c3163b8ca9b7e67c509fffd9121e66cb96205` |
 | Dataset | `lerobot/svla_so100_pickplace` at `728583b5eaf9e739a7f119e2def466fa1d552402` |
 | Training | 50 steps, batch size 1, seed 42 |
-| Compute | `gpu-l40s-a` / `1gpu-8vcpu-32gb`, preemptible |
-| Output | writable bucket mounted at `/workspace/output` |
+| Compute | `gpu-h100-sxm` / `1gpu-16vcpu-200gb`, regular |
+| Output | writable bucket mounted at `/tmp/output` |
 
 Pinning does not make the model good; it makes the run traceable. A future change to the model, dataset, or image should be reviewed and tested as a new recipe revision.
 
@@ -86,7 +86,7 @@ python3 scripts/verify.py
 
 The verifier requires non-empty Safetensors weights and `train_config.json`, checks the recorded dataset revision, step count, batch size, seed, and `smolvla` policy type, then writes `run-report.json`. A passing report proves that the expected checkpoint package exists; it does not score manipulation quality.
 
-If model or dataset downloads fail, check outbound access and cache permissions. If CUDA is unavailable, confirm the L40S platform and preset. If the bucket remains empty, inspect the final copy step and mount permissions before resubmitting.
+If model or dataset downloads fail, check outbound access and cache permissions. If CUDA is unavailable, confirm the H100 SXM platform and preset. If the bucket remains empty, confirm the pinned root wrapper and `/tmp/output` mount, then inspect the final copy step before resubmitting.
 
 ## Clean up and next steps
 
@@ -99,6 +99,6 @@ bash scripts/cleanup.sh
 
 Remove test-only bucket objects or the bucket separately when they are no longer needed. For a real robotics experiment, define task-specific data, training length, offline evaluation, and a baseline. Before hardware use, validate in simulation and a controlled environment with human supervision, motion and force limits, emergency stops, and a rollback plan.
 
-> **Planning estimate:** approximately **$0.40** and **30 minutes** from creation to a persisted checkpoint. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-l40s-a` / `1gpu-8vcpu-32gb` job, a 500 GiB disk, and deletion after verification. It is not a measured run and excludes taxes, egress, and retained Object Storage.
+> **Planning estimate:** No cost or time estimate is asserted for this regular H100 SXM job. Review the current Nebius price shown for the exact configuration before creation, and use the resulting billing and job timestamps if you need measured figures for your own run.
 
-The linked video explains the general fine-tuning workflow. This recipe still needs a real Nebius L40S run before it can claim deployment success, measured performance, convergence, or robot performance; `metrics_verified_at` remains empty.
+The linked video explains the general fine-tuning workflow. A real Nebius H100 job completed all 50 steps and persisted 15 step-50 checkpoint objects on 2026-08-27. That validates deployment and artifact persistence only—not cost, timing, convergence, model quality, or robot performance—so `metrics_verified_at` remains empty.
