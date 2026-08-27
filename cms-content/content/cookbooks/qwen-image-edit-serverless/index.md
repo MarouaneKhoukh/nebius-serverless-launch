@@ -10,9 +10,9 @@ github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/template
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Qwen image editing, served on demand"
 catalog_card_description: "Upload an image with an edit instruction, call Qwen-Image-Edit-2511 through a multipart API, and validate the returned PNG."
-estimated_cost_per_run_usd: null
+estimated_cost_per_run_usd: 0.75
 cost_qualifier: "approximate"
-time_to_first_run_minutes: null
+time_to_first_run_minutes: 20
 time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
@@ -96,4 +96,6 @@ nebius ai endpoint delete "$ENDPOINT_ID"
 
 Before accepting user images, enforce MIME type, dimensions and payload size; strip unnecessary metadata; add authentication, timeouts and moderation; and define a retention policy. For generation without an input image, use the Sana text-to-image recipe instead.
 
-The linked video covers the general endpoint workflow. It is not evidence of edit quality, startup time, latency, or cost for this H100 configuration.
+> **Planning estimate:** approximately **$0.75** and **20 minutes** from creation to the first verified edited PNG. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-h100-sxm` / `1gpu-16vcpu-200gb` endpoint, a 500 GiB disk, and deletion immediately after the test. It is not a measured run and excludes taxes, egress, and retained images or storage.
+
+The linked video covers the general endpoint workflow. It is not evidence of edit quality or measured performance; `metrics_verified_at` remains empty until a controlled run records the result.

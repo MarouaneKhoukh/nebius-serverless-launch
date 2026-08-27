@@ -19,6 +19,15 @@ SOURCES = {
     "smolvla-physical-ai-job": "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/smolvla-finetune-job",
 }
 
+PLANNING_ESTIMATES = {
+    "qwen3-serverless-endpoint": ("0.15", "10"),
+    "sana-serverless-endpoint": ("0.20", "15"),
+    "kokoro-serverless-tts": ("0.15", "10"),
+    "qwen-image-edit-serverless": ("0.75", "20"),
+    "axolotl-qwen-finetune-job": ("0.75", "20"),
+    "smolvla-physical-ai-job": ("0.40", "30"),
+}
+
 REQUIRED_FRONTMATTER = {
     "id",
     "status",
@@ -69,8 +78,11 @@ def main() -> None:
         assert metadata["slug"] == slug
         assert metadata["status"] == "in_review"
         assert metadata["github_url"] == source
-        assert metadata["estimated_cost_per_run_usd"] == "null"
-        assert metadata["time_to_first_run_minutes"] == "null"
+        expected_cost, expected_minutes = PLANNING_ESTIMATES[slug]
+        assert metadata["estimated_cost_per_run_usd"] == expected_cost
+        assert metadata["cost_qualifier"] == "approximate"
+        assert metadata["time_to_first_run_minutes"] == expected_minutes
+        assert metadata["time_qualifier"] == "approximately"
         assert metadata["metrics_verified_at"] == "null"
         assert metadata["published_at"] == "null"
         assert len(prompt) >= 40
@@ -87,6 +99,8 @@ def main() -> None:
         assert len(body.split()) >= 450, f"{slug}: recipe body is too shallow"
         assert re.search(r"\b[Ss]uccess", body), f"{slug}: missing success criteria"
         assert re.search(r"\b[Dd]elete\b", body), f"{slug}: missing cleanup instruction"
+        assert "**Planning estimate:**" in body
+        assert "metrics_verified_at` remains empty" in body
 
         evaluation = json.loads((directory / "eval.json").read_text(encoding="utf-8"))
         assert evaluation["enabled"] is False

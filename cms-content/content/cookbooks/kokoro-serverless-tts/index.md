@@ -10,9 +10,9 @@ github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/template
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Kokoro speech generation, served as an API"
 catalog_card_description: "Send text to Kokoro-82M through an OpenAI-style speech endpoint, save the MP3, and verify the audio response."
-estimated_cost_per_run_usd: null
+estimated_cost_per_run_usd: 0.15
 cost_qualifier: "approximate"
-time_to_first_run_minutes: null
+time_to_first_run_minutes: 10
 time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
@@ -88,4 +88,6 @@ nebius ai endpoint delete "$ENDPOINT_ID"
 
 For production, validate every allowed voice and language, cap input length, add authentication and rate limits, and decide whether generated audio is retained. An application that republishes synthetic speech also needs an appropriate disclosure and acceptable-use policy.
 
-The linked video demonstrates the common Serverless Endpoint workflow. It does not establish this model's voice quality, startup time, synthesis latency, or cost; those remain unverified until a controlled run is recorded.
+> **Planning estimate:** approximately **$0.15** and **10 minutes** from creation to the first verified audio file. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-l40s-a` / `1gpu-8vcpu-32gb` endpoint, a 500 GiB disk, and deletion immediately after the test. It is not a measured run and excludes taxes, egress, and retained audio or storage.
+
+The linked video demonstrates the common Serverless Endpoint workflow. It does not establish this model's voice quality or measured performance; `metrics_verified_at` remains empty until a controlled run is recorded.

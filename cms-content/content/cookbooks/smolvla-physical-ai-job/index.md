@@ -10,9 +10,9 @@ github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/mai
 video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
 catalog_card_title: "SmolVLA fine-tuning for physical AI"
 catalog_card_description: "Run a bounded 50-step SmolVLA training job, preserve its checkpoint, and separate cloud-pipeline proof from robot performance."
-estimated_cost_per_run_usd: null
+estimated_cost_per_run_usd: 0.40
 cost_qualifier: "approximate"
-time_to_first_run_minutes: null
+time_to_first_run_minutes: 30
 time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
@@ -99,4 +99,6 @@ bash scripts/cleanup.sh
 
 Remove test-only bucket objects or the bucket separately when they are no longer needed. For a real robotics experiment, define task-specific data, training length, offline evaluation, and a baseline. Before hardware use, validate in simulation and a controlled environment with human supervision, motion and force limits, emergency stops, and a rollback plan.
 
-The linked video explains the general fine-tuning workflow. This recipe still needs a real Nebius L40S run before it can claim deployment success, duration, cost, convergence, or robot performance.
+> **Planning estimate:** approximately **$0.40** and **30 minutes** from creation to a persisted checkpoint. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-l40s-a` / `1gpu-8vcpu-32gb` job, a 500 GiB disk, and deletion after verification. It is not a measured run and excludes taxes, egress, and retained Object Storage.
+
+The linked video explains the general fine-tuning workflow. This recipe still needs a real Nebius L40S run before it can claim deployment success, measured performance, convergence, or robot performance; `metrics_verified_at` remains empty.

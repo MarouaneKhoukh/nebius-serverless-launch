@@ -10,9 +10,9 @@ github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/template
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Qwen3 chat API, without managing GPUs"
 catalog_card_description: "Bring up Qwen3-0.6B behind vLLM, wait for real API readiness, send a chat request, and tear the endpoint down cleanly."
-estimated_cost_per_run_usd: null
+estimated_cost_per_run_usd: 0.15
 cost_qualifier: "approximate"
-time_to_first_run_minutes: null
+time_to_first_run_minutes: 10
 time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
@@ -87,4 +87,6 @@ nebius ai endpoint delete "$ENDPOINT_ID"
 
 Confirm that it no longer appears as active in your project. For a longer-lived service, add token authentication, request limits, logs and metrics, and an explicit capacity decision. To customize a model before serving it, continue with the Axolotl QLoRA recipe in this catalog.
 
-The linked video demonstrates the common Serverless Endpoint flow. It is not evidence of this recipe's startup time, inference latency, or cost; those fields remain empty until a controlled Nebius run records them.
+> **Planning estimate:** approximately **$0.15** and **10 minutes** from creation to the first verified reply. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-l40s-a` / `1gpu-8vcpu-32gb` endpoint, a 500 GiB disk, and deletion immediately after the test. It is not a measured run and excludes taxes, egress, and retained storage.
+
+The linked video demonstrates the common Serverless Endpoint flow. It is not evidence of this recipe's startup time, inference latency, or cost; `metrics_verified_at` remains empty until a controlled Nebius run records them.
