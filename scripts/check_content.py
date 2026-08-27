@@ -103,6 +103,7 @@ def main() -> None:
         assert "metrics_verified_at` remains empty" in body
         if slug.endswith("serverless-endpoint") or slug == "kokoro-serverless-tts":
             assert "per active hour" in body
+            assert "> **Endpoint lifecycle:**" in body
             assert "nebius ai endpoint stop --id" in body
             assert "nebius ai endpoint start --id" in body
             assert "nebius ai endpoint delete --id" in body

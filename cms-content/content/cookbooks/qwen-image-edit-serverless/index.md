@@ -89,12 +89,16 @@ If readiness returns `502`, the model is still downloading or loading. If the re
 
 ## Clean up and next steps
 
+> **Endpoint lifecycle:** this recipe covers the first deployment and verification. Keep the endpoint running while it serves traffic, stop it when it will be temporarily idle, and delete it only when the service is no longer needed.
+
+Stop the endpoint without deleting it:
+
 ```bash
 export ENDPOINT_ID="endpoint-..."
 nebius ai endpoint stop --id "$ENDPOINT_ID"
 ```
 
-Keep it running while it serves traffic, or restart the stopped endpoint later with `nebius ai endpoint start --id "$ENDPOINT_ID"`. Delete it only when the service is no longer needed:
+Restart the stopped endpoint later with `nebius ai endpoint start --id "$ENDPOINT_ID"`. Delete it only when the service is no longer needed:
 
 ```bash
 nebius ai endpoint delete --id "$ENDPOINT_ID"

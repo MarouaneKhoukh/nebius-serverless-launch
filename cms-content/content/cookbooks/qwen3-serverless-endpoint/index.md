@@ -78,7 +78,9 @@ If the request returns `401` or `403`, use the token configured for this endpoin
 
 ## Clean up and next steps
 
-Keep the endpoint running while it serves traffic. Stop it when it will be temporarily idle:
+> **Endpoint lifecycle:** this recipe covers the first deployment and verification. Keep the endpoint running while it serves traffic, stop it when it will be temporarily idle, and delete it only when the service is no longer needed.
+
+Stop the endpoint without deleting it:
 
 ```bash
 export ENDPOINT_ID="endpoint-..."
