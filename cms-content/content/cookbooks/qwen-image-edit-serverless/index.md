@@ -9,8 +9,8 @@ internal_content_description: "CMS adaptation of the existing Qwen-Image-Edit-25
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-qwen-image-edit-2511"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Qwen image editing, served on demand"
-catalog_card_description: "Upload an image with an edit instruction, call Qwen-Image-Edit-2511 through a multipart API, and validate the returned PNG."
-estimated_cost_per_run_usd: 0.75
+catalog_card_description: "Serve Qwen-Image-Edit-2511 through a multipart image API estimated at about $2.20 per active hour."
+estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: 20
 time_qualifier: "approximately"
@@ -91,11 +91,17 @@ If readiness returns `502`, the model is still downloading or loading. If the re
 
 ```bash
 export ENDPOINT_ID="endpoint-..."
-nebius ai endpoint delete "$ENDPOINT_ID"
+nebius ai endpoint stop --id "$ENDPOINT_ID"
 ```
 
-Before accepting user images, enforce MIME type, dimensions and payload size; strip unnecessary metadata; add authentication, timeouts and moderation; and define a retention policy. For generation without an input image, use the Sana text-to-image recipe instead.
+Keep it running while it serves traffic, or restart the stopped endpoint later with `nebius ai endpoint start --id "$ENDPOINT_ID"`. Delete it only when the service is no longer needed:
 
-> **Planning estimate:** approximately **$0.75** and **20 minutes** from creation to the first verified edited PNG. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-h100-sxm` / `1gpu-16vcpu-200gb` endpoint, a 500 GiB disk, and deletion immediately after the test. It is not a measured run and excludes taxes, egress, and retained images or storage.
+```bash
+nebius ai endpoint delete --id "$ENDPOINT_ID"
+```
+
+Stopped endpoints do not incur compute charges, but mounted volumes can continue to be billed. Before accepting user images, enforce MIME type, dimensions and payload size; strip unnecessary metadata; add authentication, timeouts and moderation; and define a retention policy. For generation without an input image, use the Sana text-to-image recipe instead.
+
+> **Planning estimate:** approximately **$2.20 per active hour** and **20 minutes** from creation to the first verified edited PNG. The hourly figure is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-h100-sxm` / `1gpu-16vcpu-200gb` endpoint, and a 500 GiB disk. It is not a measured run; actual charges vary with active duration, storage, egress, and taxes.
 
 The linked video covers the general endpoint workflow. It is not evidence of edit quality or measured performance; `metrics_verified_at` remains empty until a controlled run records the result.

@@ -30,7 +30,11 @@ python3 scripts/check_content.py
 (cd smolvla-finetune-job && bash scripts/check.sh)
 ```
 
-These checks use no credentials, network, GPU, or paid Nebius resources. All six entries remain `in_review`; cost, time-to-first-run, and deployment evidence stay empty until controlled live runs establish them.
+These checks use no credentials, network, GPU, or paid Nebius resources. All six entries remain `in_review`. Cost and time figures are clearly labeled editorial planning estimates; `metrics_verified_at` stays empty until controlled live runs establish evidence.
+
+## Cost units
+
+Endpoints are estimated per active hour, while Serverless Jobs are estimated per run. Daniel's current CMS schema only has `estimated_cost_per_run_usd`, so the four endpoint records leave that structured field empty and state their hourly estimates in the catalog descriptions and recipe bodies. The CMS should eventually add an explicit `cost_unit` such as `hour` or `run` before hourly endpoint figures are placed in the dedicated cost metric.
 
 ## License
 

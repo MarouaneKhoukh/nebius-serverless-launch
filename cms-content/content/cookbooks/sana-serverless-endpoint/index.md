@@ -9,8 +9,8 @@ internal_content_description: "CMS adaptation of the existing Sana one-click end
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-sana"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Sana text-to-image on a single L40S"
-catalog_card_description: "Turn a seeded prompt into a 1024px image with Sana 1.6B, validate the returned PNG, and remove the endpoint afterward."
-estimated_cost_per_run_usd: 0.20
+catalog_card_description: "Turn prompts into 1024px images with Sana 1.6B on an endpoint estimated at about $0.80 per active hour."
+estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: 15
 time_qualifier: "approximately"
@@ -80,11 +80,17 @@ If `/v1/models` returns `502`, the model is still loading. If the container repo
 
 ```bash
 export ENDPOINT_ID="endpoint-..."
-nebius ai endpoint delete "$ENDPOINT_ID"
+nebius ai endpoint stop --id "$ENDPOINT_ID"
 ```
 
-Before handling user prompts, add authentication, request-size and dimension limits, timeouts, moderation, logging, and an image-retention policy. For image-to-image work rather than generation from text, continue with the Qwen Image Edit recipe.
+Keep it running while it serves traffic, or restart the stopped endpoint later with `nebius ai endpoint start --id "$ENDPOINT_ID"`. Delete it only when the service is no longer needed:
 
-> **Planning estimate:** approximately **$0.20** and **15 minutes** from creation to the first verified PNG. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-l40s-a` / `1gpu-8vcpu-32gb` endpoint, a 500 GiB disk, and deletion immediately after the test. It is not a measured run and excludes taxes, egress, and retained images or storage.
+```bash
+nebius ai endpoint delete --id "$ENDPOINT_ID"
+```
+
+Stopped endpoints do not incur compute charges, but mounted volumes can continue to be billed. Before handling user prompts, add authentication, request-size and dimension limits, timeouts, moderation, logging, and an image-retention policy. For image-to-image work rather than generation from text, continue with the Qwen Image Edit recipe.
+
+> **Planning estimate:** approximately **$0.80 per active hour** and **15 minutes** from creation to the first verified PNG. The hourly figure is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-l40s-a` / `1gpu-8vcpu-32gb` endpoint, and a 500 GiB disk. It is not a measured run; actual charges vary with active duration, storage, egress, and taxes.
 
 The linked video covers the general endpoint deployment flow. This draft does not claim a measured startup time, generation latency, cost, or image-quality result; `metrics_verified_at` remains empty until the recipe is run and recorded on Nebius.

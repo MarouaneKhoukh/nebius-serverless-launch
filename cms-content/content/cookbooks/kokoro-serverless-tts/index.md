@@ -9,8 +9,8 @@ internal_content_description: "CMS adaptation of the existing Kokoro-82M one-cli
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-kokoro-82m"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Kokoro speech generation, served as an API"
-catalog_card_description: "Send text to Kokoro-82M through an OpenAI-style speech endpoint, save the MP3, and verify the audio response."
-estimated_cost_per_run_usd: 0.15
+catalog_card_description: "Serve Kokoro-82M through an OpenAI-style speech API estimated at about $0.80 per active hour."
+estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: 10
 time_qualifier: "approximately"
@@ -83,11 +83,17 @@ If readiness returns `502`, keep waiting for the model and API to load. If MP3 o
 
 ```bash
 export ENDPOINT_ID="endpoint-..."
-nebius ai endpoint delete "$ENDPOINT_ID"
+nebius ai endpoint stop --id "$ENDPOINT_ID"
 ```
 
-For production, validate every allowed voice and language, cap input length, add authentication and rate limits, and decide whether generated audio is retained. An application that republishes synthetic speech also needs an appropriate disclosure and acceptable-use policy.
+Keep it running while it serves traffic, or restart the stopped endpoint later with `nebius ai endpoint start --id "$ENDPOINT_ID"`. Delete it only when the service is no longer needed:
 
-> **Planning estimate:** approximately **$0.15** and **10 minutes** from creation to the first verified audio file. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-l40s-a` / `1gpu-8vcpu-32gb` endpoint, a 500 GiB disk, and deletion immediately after the test. It is not a measured run and excludes taxes, egress, and retained audio or storage.
+```bash
+nebius ai endpoint delete --id "$ENDPOINT_ID"
+```
+
+Stopped endpoints do not incur compute charges, but mounted volumes can continue to be billed. For production, validate every allowed voice and language, cap input length, add authentication and rate limits, and decide whether generated audio is retained. An application that republishes synthetic speech also needs an appropriate disclosure and acceptable-use policy.
+
+> **Planning estimate:** approximately **$0.80 per active hour** and **10 minutes** from creation to the first verified audio file. The hourly figure is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-l40s-a` / `1gpu-8vcpu-32gb` endpoint, and a 500 GiB disk. It is not a measured run; actual charges vary with active duration, storage, egress, and taxes.
 
 The linked video demonstrates the common Serverless Endpoint workflow. It does not establish this model's voice quality or measured performance; `metrics_verified_at` remains empty until a controlled run is recorded.

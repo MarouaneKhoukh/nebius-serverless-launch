@@ -10,6 +10,6 @@ Each cookbook has the required three-file contract:
 
 Five entries link directly to existing directories in `nebius/serverless-ai-cookbook`. SmolVLA links to the new template in this repository.
 
-All entries intentionally remain `in_review`. The current evaluator only supports text-only Token Factory targets and cannot provision Nebius Serverless resources, so these evals remain disabled. Cost, timing, publication dates, and verification timestamps remain empty until the CMS contract supports Serverless evaluation and controlled live runs provide evidence.
+All entries intentionally remain `in_review`. The current evaluator only supports text-only Token Factory targets and cannot provision Nebius Serverless resources, so these evals remain disabled. Endpoint prices are shown as approximate active hourly rates in prose; job prices remain approximate per-run figures. Because the current CMS schema exposes only `estimated_cost_per_run_usd`, the endpoint structured-cost fields remain empty until the schema gains a cost unit. Publication and verification timestamps remain empty until controlled live runs provide evidence.
 
 No generated Directus files from Daniel's repository are stored here.

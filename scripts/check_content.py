@@ -20,10 +20,10 @@ SOURCES = {
 }
 
 PLANNING_ESTIMATES = {
-    "qwen3-serverless-endpoint": ("0.15", "10"),
-    "sana-serverless-endpoint": ("0.20", "15"),
-    "kokoro-serverless-tts": ("0.15", "10"),
-    "qwen-image-edit-serverless": ("0.75", "20"),
+    "qwen3-serverless-endpoint": ("null", "10"),
+    "sana-serverless-endpoint": ("null", "15"),
+    "kokoro-serverless-tts": ("null", "10"),
+    "qwen-image-edit-serverless": ("null", "20"),
     "axolotl-qwen-finetune-job": ("0.75", "20"),
     "smolvla-physical-ai-job": ("0.40", "30"),
 }
@@ -101,6 +101,11 @@ def main() -> None:
         assert re.search(r"\b[Dd]elete\b", body), f"{slug}: missing cleanup instruction"
         assert "**Planning estimate:**" in body
         assert "metrics_verified_at` remains empty" in body
+        if slug.endswith("serverless-endpoint") or slug == "kokoro-serverless-tts":
+            assert "per active hour" in body
+            assert "nebius ai endpoint stop --id" in body
+            assert "nebius ai endpoint start --id" in body
+            assert "nebius ai endpoint delete --id" in body
 
         evaluation = json.loads((directory / "eval.json").read_text(encoding="utf-8"))
         assert evaluation["enabled"] is False
