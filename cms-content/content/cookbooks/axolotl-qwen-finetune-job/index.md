@@ -8,8 +8,8 @@ model: null
 internal_content_description: "CMS adaptation of the existing Axolotl one-click job template in nebius/serverless-ai-cookbook. The template currently pre-fills H100 and 500 GiB while the separate official Nebius tutorial uses L40S and 450 GiB; DevRel should reconcile that difference. Live validation, a Serverless-job evaluator, a compatible model record, and measured cost and time-to-first-run are also required."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/job-axolotl-finetune"
 video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
-catalog_card_title: "Fine-tune Qwen with Axolotl"
-catalog_card_description: "Launch an Axolotl QLoRA job from a one-click template and persist the resulting adapter in Object Storage."
+catalog_card_title: "Qwen fine-tuning with Axolotl"
+catalog_card_description: "Run a bounded 30-step QLoRA fine-tune of Qwen2.5-0.5B, preserve the adapter in Object Storage, and inspect the result."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: null
@@ -19,28 +19,79 @@ published_at: null
 sort: 140
 ---
 
-# Fine-tune Qwen with Axolotl
+# Fine-tune Qwen2.5-0.5B with Axolotl on Nebius Serverless
 
-Use the existing Nebius Serverless Job template to fine-tune Qwen2.5-0.5B with Axolotl and QLoRA. The training job terminates after completion, while the mounted Object Storage bucket preserves the resulting adapter.
+Fine-tuning tutorials often prove that a training command starts but lose the output when the machine disappears. This recipe runs a deliberately small [Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B) QLoRA job and copies the completed adapter into mounted Object Storage before the Serverless Job ends.
 
-> **Why this matters for Serverless:** Fine-tuning becomes a bounded batch workload. Nebius provisions the GPU for the job and releases its compute when the job finishes.
+> **Why this matters here:** fine-tuning is naturally a bounded batch workload. Nebius provisions the GPU for the run, Axolotl owns the training loop, and Object Storage separates the useful adapter from the disposable compute.
 
 ## What you'll run
 
-The template starts the published Axolotl image, downloads the cookbook's training configuration, runs the fine-tune, and copies completed output to a mounted bucket. Its current one-click configuration pre-fills a preemptible H100 and a 500 GiB container disk.
+The [Axolotl template](https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/job-axolotl-finetune) performs this pipeline:
+
+1. Start the published Axolotl image on one preemptible H100.
+2. Download the cookbook's reviewed YAML configuration.
+3. Fine-tune Qwen2.5-0.5B for 30 steps with 4-bit QLoRA.
+4. Copy the completed output into a timestamped directory in the mounted bucket.
+5. Stop the job while retaining the adapter artifacts.
+
+The short run validates the training and persistence path. It is not intended to produce a production-quality language model.
 
 ## Setup
 
-Use an existing Nebius project with the required GPU quota, a subnet, and a writable Object Storage bucket mounted at the path shown by the template. Review the dataset, base model, image tag, training configuration, output path, and current pricing before starting the job.
+You need a Nebius project and subnet with H100 quota plus a writable Object Storage bucket. The template mounts that bucket at `/workspace/data`, uses `axolotlai/axolotl:main-20260309-py3.11-cu128-2.9.1`, and pre-fills 500 GiB of disk and 16 GiB of shared memory.
 
-## Run it
+Open the template's **Create Job** link, select the project, network, and bucket, and review the current price and every pre-filled value before creating a billable job. The source configuration uses public model and dataset assets, so an `HF_TOKEN` is optional unless anonymous Hub access is throttled.
 
-Open the linked recipe and use its **Create Job** link or CLI alternative. Select the project, network, and bucket, then start the job and follow its logs. The accompanying video explains the common Serverless fine-tuning workflow rather than serving as proof for this exact configuration.
+## The QLoRA job
 
-## Verify and clean up
+The downloaded configuration keeps the launch test small and inspectable:
 
-Success means the job completes and the mounted bucket contains a non-empty adapter plus its configuration. Preserve only artifacts you need. Record cost and runtime from the actual job, then delete the job and remove test-only storage when appropriate.
+```yaml
+base_model: Qwen/Qwen2.5-0.5B
+load_in_4bit: true
+adapter: qlora
 
-## Next steps
+datasets:
+  - path: Salesforce/wikitext
+    name: wikitext-2-raw-v1
+    split: "train[:2000]"
+    type: completion
 
-Evaluate the adapter against a task-specific dataset before treating it as useful. A completed training loop proves the pipeline ran; it does not establish model quality.
+sequence_len: 128
+micro_batch_size: 1
+max_steps: 30
+output_dir: /workspace/output
+```
+
+After training succeeds, the job copies `/workspace/output` into `/workspace/data/output/run-<timestamp>`. That final copy is important: files that exist only on the job's local disk disappear with the compute.
+
+## Run and verify
+
+Start the job from the pre-filled Console form or use the equivalent CLI command in the upstream recipe. Save the returned job ID, then inspect status and logs:
+
+```bash
+export JOB_ID="job-..."
+nebius ai job get "$JOB_ID"
+nebius ai logs "$JOB_ID"
+```
+
+A successful infrastructure run reaches a completed state and leaves a timestamped adapter directory in Object Storage. Download that directory and check for a readable `adapter_config.json` and at least one non-empty Safetensors adapter file:
+
+```bash
+find ./downloaded-adapter -name adapter_config.json -o -name '*.safetensors'
+```
+
+Those files prove that the bounded training pipeline produced an adapter package. They do not prove that the adapter improved Qwen on a useful task; that requires a separate evaluation dataset and baseline comparison.
+
+If the job cannot write output, check the bucket mount and its identity permissions. For out-of-memory failures, confirm that the expected QLoRA configuration and H100 preset were used. If no adapter appears, inspect the final training and copy logs before rerunning.
+
+## Clean up and next steps
+
+```bash
+nebius ai job delete "$JOB_ID"
+```
+
+Keep the adapter only if you need it, then remove test-only bucket objects and dedicated IAM bindings. The one-click template currently pre-fills H100 and 500 GiB, while a separate Nebius tutorial uses different resources; this draft follows the template and keeps that difference flagged for editorial review.
+
+Next, evaluate the adapter against the untouched base model on representative prompts. The linked video explains the broader Serverless fine-tuning workflow, not the quality, duration, or cost of this exact 30-step run.

@@ -8,8 +8,8 @@ model: null
 internal_content_description: "CMS adaptation of the existing Sana one-click endpoint template in nebius/serverless-ai-cookbook. Live L40S and media-output validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-sana"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
-catalog_card_title: "Generate images with Sana on Serverless"
-catalog_card_description: "Deploy Sana 1.6B from a one-click template and turn a text prompt into a 1024-pixel image on an L40S."
+catalog_card_title: "Sana text-to-image on a single L40S"
+catalog_card_description: "Turn a seeded prompt into a 1024px image with Sana 1.6B, validate the returned PNG, and remove the endpoint afterward."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: null
@@ -19,30 +19,70 @@ published_at: null
 sort: 110
 ---
 
-# Generate images with Sana on Serverless
+# Run Sana 1.6B text-to-image on Nebius Serverless
 
-Deploy `Efficient-Large-Model/Sana_1600M_1024px_diffusers` as a text-to-image endpoint using the existing Nebius Serverless template. The template points to the prepared serving image and includes the request contract needed to generate an image.
+Text-to-image demos often end with “the endpoint is healthy.” This recipe goes one step further: it deploys [Sana 1.6B](https://huggingface.co/Efficient-Large-Model/Sana_1600M_1024px_diffusers), submits a fixed prompt and seed, decodes the API response, and leaves you with a real PNG to inspect.
 
-> **Why this matters for Serverless:** A GPU-backed image model becomes an HTTP service in your own Nebius project, with lifecycle and access controlled by you.
+> **Why this matters here:** Sana's weights and image pipeline need a GPU serving environment, but the useful product surface is just an HTTP request. Nebius Serverless keeps that infrastructure boundary behind an endpoint you can create and delete with the workload.
 
-## What you'll deploy
+## What you'll build
 
-The template creates a preemptible L40S endpoint from the published Sana serving image. It exposes a readiness route and an OpenAI-shaped image-generation route that returns base64-encoded image data.
+A text-to-image endpoint that:
+
+- serves the Apache-2.0 Sana Diffusers checkpoint on one preemptible L40S;
+- exposes `GET /v1/models` for readiness;
+- accepts JSON at `POST /v1/images/generations`;
+- returns base64-encoded PNG data in `data[0].b64_json`;
+- produces a local `sana.png` from a seeded 1024×1024 request.
+
+The pre-built image supports overrides such as `MODEL_ID`, `IMAGE_SIZE`, `INFERENCE_STEPS`, and `GUIDANCE_SCALE`. Changing the model can also change the applicable license, so keep the default for the first run.
 
 ## Setup
 
-Use an existing Nebius project with L40S quota and a selected subnet. Review the published container reference and every pre-filled resource before creation. Configure token authentication before shared or production use.
+Use a Nebius project and subnet with L40S quota. Open the [Sana template](https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-sana), click **Create Endpoint**, and review the pre-filled published image, port `8000`, `1gpu-8vcpu-32gb` preset, 500 GiB disk, 16 GiB shared memory, and preemptible setting.
 
-## Run it
+The quick test template leaves authentication off. Enable token authentication before exposing the endpoint beyond a short controlled test, and add its bearer header to the commands if you enable it.
 
-Open the linked recipe, launch the pre-filled endpoint, and wait for its readiness route rather than relying only on the resource state. Submit the documented seeded image-generation request, decode the response, and inspect the resulting image.
+```bash
+export BASE_URL="https://your-endpoint.example"
+```
 
-The linked video shows the general Serverless Endpoint deployment workflow. It is not a Sana-specific benchmark or performance claim.
+## The image request
 
-## Verify and clean up
+Wait for the application, not just the resource state:
 
-Success means the live API returns decodable image data with the expected file format. Visual inspection is still required; a valid image file alone does not establish prompt quality. Record only observed cost and timing, then delete the endpoint after the test.
+```bash
+curl -sS "$BASE_URL/v1/models"
+```
 
-## Next steps
+Then submit the cookbook's fixed prompt and seed. The seed makes repeated requests easier to compare; it does not guarantee identical output across a changed image, model revision, or runtime.
 
-Before accepting user traffic, add input limits, moderation, timeouts, authentication, logging, and a retention policy for generated media.
+```bash
+curl -sS -X POST "$BASE_URL/v1/images/generations" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"a red fox in a snowy pine forest at golden hour","size":"1024x1024","seed":42}' \
+  | python3 -c 'import base64,json,sys; p="sana.png"; open(p,"wb").write(base64.b64decode(json.load(sys.stdin)["data"][0]["b64_json"])); print(f"wrote {p}")'
+```
+
+## Run and verify
+
+Check the file without requiring an image-processing package:
+
+```bash
+python3 -c 'import struct; d=open("sana.png","rb").read(24); assert d[:8]==b"\x89PNG\r\n\x1a\n"; print("PNG dimensions:", *struct.unpack(">II",d[16:24]))'
+```
+
+Success means the response decodes, the PNG signature is correct, the reported dimensions match the requested size, and the image opens. Visual inspection is still essential: transport and file-integrity checks cannot tell you whether the fox, scene, or composition is good.
+
+If `/v1/models` returns `502`, the model is still loading. If the container reports no CUDA device, check the platform and preset. Black or empty output can indicate an incompatible dtype override; the published image keeps the text encoder and VAE in bf16 and the transformer in fp16.
+
+## Clean up and next steps
+
+```bash
+export ENDPOINT_ID="endpoint-..."
+nebius ai endpoint delete "$ENDPOINT_ID"
+```
+
+Before handling user prompts, add authentication, request-size and dimension limits, timeouts, moderation, logging, and an image-retention policy. For image-to-image work rather than generation from text, continue with the Qwen Image Edit recipe.
+
+The linked video covers the general endpoint deployment flow. This draft does not claim a startup time, generation latency, cost, or image-quality result until the recipe is run and recorded on Nebius.

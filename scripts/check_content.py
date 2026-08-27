@@ -77,6 +77,17 @@ def main() -> None:
         assert source in prompt
         assert not re.search(r"\b(?:TODO|TBD|N/A)\b", index + prompt)
 
+        body = index.split("\n---\n", 1)[1]
+        section_headings = re.findall(r"^## (.+)$", body, flags=re.MULTILINE)
+        assert len(section_headings) == 5, f"{slug}: expected 5 recipe sections"
+        assert section_headings[0] in {"What you'll build", "What you'll run"}
+        assert section_headings[-1] == "Clean up and next steps"
+        assert "> **Why this matters here:**" in body
+        assert "```" in body, f"{slug}: missing runnable example"
+        assert len(body.split()) >= 450, f"{slug}: recipe body is too shallow"
+        assert re.search(r"\b[Ss]uccess", body), f"{slug}: missing success criteria"
+        assert re.search(r"\b[Dd]elete\b", body), f"{slug}: missing cleanup instruction"
+
         evaluation = json.loads((directory / "eval.json").read_text(encoding="utf-8"))
         assert evaluation["enabled"] is False
         assert evaluation["execution"] is None

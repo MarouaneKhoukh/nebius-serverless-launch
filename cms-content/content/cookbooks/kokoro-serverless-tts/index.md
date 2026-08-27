@@ -8,8 +8,8 @@ model: null
 internal_content_description: "CMS adaptation of the existing Kokoro-82M one-click endpoint template in nebius/serverless-ai-cookbook. Live L40S and audio-output validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-kokoro-82m"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
-catalog_card_title: "Turn text into speech with Kokoro"
-catalog_card_description: "Deploy Kokoro-82M from a one-click Serverless template and generate speech through an OpenAI-compatible API."
+catalog_card_title: "Kokoro speech generation, served as an API"
+catalog_card_description: "Send text to Kokoro-82M through an OpenAI-style speech endpoint, save the MP3, and verify the audio response."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: null
@@ -19,30 +19,73 @@ published_at: null
 sort: 120
 ---
 
-# Turn text into speech with Kokoro
+# Deploy Kokoro-82M text-to-speech on Nebius Serverless
 
-Run [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) as a speech endpoint from the existing Nebius Serverless template. The recipe uses a prepared serving image and an OpenAI-compatible text-to-speech request.
+Speech APIs hide a surprisingly long dependency chain: model weights, grapheme-to-phoneme conversion, audio encoding, and an HTTP contract. This recipe packages [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) behind an OpenAI-style endpoint and turns one sentence into an MP3 you can download and hear.
 
-> **Why this matters for Serverless:** The model is small, but speech generation still benefits from an endpoint that owns the runtime, GPU lifecycle, and audio-serving dependencies.
+> **Why this matters here:** the endpoint owns the GPU and audio-serving runtime, while callers only choose text, voice, and output format. That makes the same speech interface available to applications without reproducing the model environment on every machine.
 
-## What you'll deploy
+## What you'll build
 
-The template starts the published Kokoro serving image on one preemptible L40S. Its API accepts text, voice, speed, language, and response-format settings and returns MP3 or WAV audio.
+A Nebius Serverless Endpoint that:
+
+- serves the 82M-parameter Kokoro model on one preemptible L40S;
+- uses `GET /v1/models` as its readiness signal;
+- accepts speech requests at `POST /v1/audio/speech`;
+- supports MP3 or WAV output plus voice and speed controls;
+- saves the returned bytes as `kokoro-sample.mp3`.
+
+The published image includes English grapheme-to-phoneme support. Its default voice is `af_bella`; other common choices include `af_heart`, `af_nicole`, `am_adam`, `bf_emma`, and `bm_george`.
 
 ## Setup
 
-Choose an existing Nebius project, confirm L40S quota, and select networking. Review the prepared container and resource settings before creation. Enable endpoint token authentication before exposing the service beyond a private test.
+Use a Nebius project and subnet with L40S quota. Open the [Kokoro-82M template](https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-kokoro-82m), click **Create Endpoint**, and review the published image, port `8000`, `1gpu-8vcpu-32gb` preset, 500 GiB disk, 16 GiB shared memory, and preemptible capacity.
 
-## Run it
+The template leaves authentication off for the first test. Enable token authentication for any shared endpoint and add `Authorization: Bearer $API_TOKEN` when it is enabled.
 
-Open the linked recipe, use its pre-filled **Create Endpoint** flow or CLI alternative, and wait until the service is ready. Send the documented short speech request, save the returned audio, and play it to confirm the spoken result.
+```bash
+export BASE_URL="https://your-endpoint.example"
+```
 
-The accompanying video demonstrates how to deploy a model on Serverless Endpoints; it is not a Kokoro quality or latency benchmark.
+## Choose a voice and response
 
-## Verify and clean up
+Wait until the service itself answers:
 
-Success means the endpoint returns a non-empty MP3 or WAV file that can be decoded and played. Record cost and timing only from the live run. Delete the endpoint when testing is finished.
+```bash
+curl -sS "$BASE_URL/v1/models"
+```
 
-## Next steps
+The request below uses the default American English voice and asks for MP3. Keep the input short for the first test so failures are easy to isolate.
 
-For production use, validate supported voices and languages, bound text length, add authentication and rate limits, and define how generated audio is retained.
+```bash
+curl -sS -X POST "$BASE_URL/v1/audio/speech" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"kokoro","input":"Hello from Kokoro on Nebius Serverless.","voice":"af_bella","response_format":"mp3"}' \
+  -o kokoro-sample.mp3
+```
+
+Voice prefixes and language support must match the image's grapheme-to-phoneme setup. Switching to a voice from another locale without the corresponding language support can produce an error or incorrect pronunciation.
+
+## Run and verify
+
+Verify that the response is non-empty, inspect the detected type, and then listen to it:
+
+```bash
+test -s kokoro-sample.mp3
+file kokoro-sample.mp3
+```
+
+Success means the live request returns a non-empty audio file that a standard player can decode, and the spoken words match the submitted sentence. File checks prove that bytes arrived; listening remains the qualitative test for intelligibility, pronunciation, and voice choice.
+
+If readiness returns `502`, keep waiting for the model and API to load. If MP3 output is empty or fails to decode, inspect endpoint logs for synthesis or `ffmpeg` errors. If a voice fails, return to `af_bella` before changing other settings.
+
+## Clean up and next steps
+
+```bash
+export ENDPOINT_ID="endpoint-..."
+nebius ai endpoint delete "$ENDPOINT_ID"
+```
+
+For production, validate every allowed voice and language, cap input length, add authentication and rate limits, and decide whether generated audio is retained. An application that republishes synthetic speech also needs an appropriate disclosure and acceptable-use policy.
+
+The linked video demonstrates the common Serverless Endpoint workflow. It does not establish this model's voice quality, startup time, synthesis latency, or cost; those remain unverified until a controlled run is recorded.

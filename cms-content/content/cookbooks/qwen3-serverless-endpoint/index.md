@@ -8,8 +8,8 @@ model: null
 internal_content_description: "CMS adaptation of the existing Qwen3-0.6B one-click template in nebius/serverless-ai-cookbook. Live L40S validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required before publication."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-vllm-qwen3-0-6b"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
-catalog_card_title: "Deploy Qwen3-0.6B on Serverless"
-catalog_card_description: "Launch a compact Qwen3 model from a one-click Serverless template and call its OpenAI-compatible chat API."
+catalog_card_title: "Qwen3 chat API, without managing GPUs"
+catalog_card_description: "Bring up Qwen3-0.6B behind vLLM, wait for real API readiness, send a chat request, and tear the endpoint down cleanly."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
 time_to_first_run_minutes: null
@@ -19,30 +19,72 @@ published_at: null
 sort: 100
 ---
 
-# Deploy Qwen3-0.6B on Serverless
+# Deploy Qwen3-0.6B with vLLM on Nebius Serverless
 
-Run the compact [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) model behind an OpenAI-compatible API without building or operating a custom serving stack. The linked Serverless template supplies the container, startup command, GPU configuration, test request, and cleanup guidance.
+An endpoint marked `RUNNING` is not useful until it can answer a request. This recipe takes the compact [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) model from a pre-filled Nebius Serverless form to a real OpenAI-compatible chat response, with an explicit readiness check and cleanup at the end.
 
-> **Why this matters for Serverless:** The model runs in your Nebius project as a managed endpoint. You control its compute, networking, authentication, lifetime, and resulting usage charges.
+> **Why this matters here:** vLLM already provides the serving layer, while Nebius Serverless owns the GPU lifecycle. You get a familiar chat API in your own project without building a container or maintaining a VM.
 
-## What you'll deploy
+## What you'll build
 
-The template starts `vllm/vllm-openai:v0.19.1` on one preemptible L40S and serves `Qwen/Qwen3-0.6B` on port 8000. It exposes `GET /v1/models` for readiness and `POST /v1/chat/completions` for inference.
+A Nebius Serverless Endpoint that:
+
+- serves `Qwen/Qwen3-0.6B` with `vllm/vllm-openai:v0.19.1`;
+- uses one preemptible L40S with the `1gpu-8vcpu-32gb` preset;
+- exposes `GET /v1/models` as the application-readiness check;
+- accepts chat requests at `POST /v1/chat/completions`;
+- saves both the complete JSON response and the assistant text locally.
+
+The template pre-fills port `8000`, a 500 GiB container disk, and 16 GiB of shared memory. Those are deployment inputs, not measured performance claims.
 
 ## Setup
 
-You need an existing Nebius project, permission and quota for an L40S Serverless Endpoint, and a suitable subnet. Review the selected resources and current pricing before creating anything. Enable token authentication for any endpoint that should not be publicly callable.
+You need a Nebius project, a subnet, permission and quota for an L40S endpoint, and the [Qwen3 template](https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-vllm-qwen3-0-6b). Open its **Create Endpoint** link, select your project and network, and review every pre-filled field before creating a billable resource.
 
-## Run it
+The template leaves authentication off for the first test. Keep that endpoint short-lived and enable token authentication before shared or production use. If authentication is enabled, add `Authorization: Bearer $API_TOKEN` to both requests below.
 
-Open the linked template and choose either its pre-filled **Create Endpoint** link or the documented CLI command. Select your project and networking, create the endpoint, then wait until `/v1/models` returns JSON. A `RUNNING` resource can still be downloading and loading model weights.
+After creation, copy the public endpoint URL:
 
-Send the template's short chat-completions request and inspect the actual model reply. The accompanying video demonstrates the common Serverless Endpoint flow rather than this model alone.
+```bash
+export BASE_URL="https://your-endpoint.example"
+```
 
-## Verify and clean up
+## The readiness contract
 
-Success means the live endpoint returns a non-empty assistant message from `POST /v1/chat/completions`. Record cost and timing only from the controlled run. Delete the endpoint when the test is complete so it no longer consumes resources.
+Nebius can report the resource as `RUNNING` while vLLM is still downloading and loading the model. Treat the API as ready only when this returns JSON:
 
-## Next steps
+```bash
+curl -sS "$BASE_URL/v1/models"
+```
 
-Add production authentication, request limits, observability, and capacity choices only after the basic template has been validated in the intended region.
+A temporary `502 failed to connect to local service` means the Serverless tunnel exists but the container has not bound port `8000` yet. Wait and retry; do not send the chat request based on the resource state alone.
+
+## Run and verify
+
+Send a small, low-temperature request and keep the raw response:
+
+```bash
+curl -sS -X POST "$BASE_URL/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"Qwen/Qwen3-0.6B","messages":[{"role":"user","content":"Say hello in one short sentence."}],"max_tokens":64,"temperature":0.2}' \
+  | tee reply.json
+
+python3 -c 'import json; p=json.load(open("reply.json")); t=p["choices"][0]["message"]["content"]; assert t.strip(); open("reply.txt","w").write(t); print(t)'
+```
+
+Success means `reply.json` is valid JSON and `reply.txt` contains a non-empty assistant message returned by the live endpoint. The wording itself can vary; the recipe does not pretend the response is deterministic.
+
+If the request returns `401` or `403`, use the token configured for this endpoint. If preemptible capacity is unavailable, retry later or review the current price before selecting regular capacity.
+
+## Clean up and next steps
+
+Delete the exact endpoint as soon as the test is complete:
+
+```bash
+export ENDPOINT_ID="endpoint-..."
+nebius ai endpoint delete "$ENDPOINT_ID"
+```
+
+Confirm that it no longer appears as active in your project. For a longer-lived service, add token authentication, request limits, logs and metrics, and an explicit capacity decision. To customize a model before serving it, continue with the Axolotl QLoRA recipe in this catalog.
+
+The linked video demonstrates the common Serverless Endpoint flow. It is not evidence of this recipe's startup time, inference latency, or cost; those fields remain empty until a controlled Nebius run records them.
