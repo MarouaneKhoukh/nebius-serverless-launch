@@ -8,18 +8,18 @@ model: null
 internal_content_description: "CMS entry for the SmolVLA one-click job template in MarouaneKhoukh/nebius-serverless-launch. A real regular H100 run completed 50 steps and persisted its checkpoint. A Serverless-job evaluator, a compatible model record, and measured cost and time-to-first-run are still required before publication."
 github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/smolvla-finetune-job"
 video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
-catalog_card_title: "SmolVLA fine-tuning for physical AI"
+catalog_card_title: "Fine-tune a policy for physical AI"
 catalog_card_description: "Run a bounded 50-step SmolVLA training job, preserve its checkpoint, and separate cloud-pipeline proof from robot performance."
 estimated_cost_per_run_usd: null
-cost_qualifier: "not measured"
+cost_qualifier: "approximate"
 time_to_first_run_minutes: null
-time_qualifier: "not measured"
+time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
 sort: 150
 ---
 
-# Fine-tune SmolVLA for physical AI on Nebius Serverless
+# Fine-tune a physical-AI policy on Nebius Serverless
 
 A robotics checkpoint is only useful when its provenance is clear. This recipe runs a bounded fine-tuning smoke test of Hugging Face's [SmolVLA](https://huggingface.co/lerobot/smolvla_base) policy on the public [SO-100 pick-and-place dataset](https://huggingface.co/datasets/lerobot/svla_so100_pickplace), then persists and inspects the resulting LeRobot checkpoint.
 

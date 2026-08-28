@@ -8,7 +8,7 @@ model: null
 internal_content_description: "CMS adaptation of the existing Kokoro-82M one-click endpoint template in nebius/serverless-ai-cookbook. Live L40S and audio-output validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-kokoro-82m"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
-catalog_card_title: "Kokoro speech generation, served as an API"
+catalog_card_title: "Build a serverless text-to-speech API"
 catalog_card_description: "Serve Kokoro-82M through an OpenAI-style speech API estimated at about $0.80 per active hour."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
@@ -19,7 +19,7 @@ published_at: null
 sort: 120
 ---
 
-# Deploy Kokoro-82M text-to-speech on Nebius Serverless
+# Build a text-to-speech API on Nebius Serverless
 
 Speech APIs hide a surprisingly long dependency chain: model weights, grapheme-to-phoneme conversion, audio encoding, and an HTTP contract. This recipe packages [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) behind an OpenAI-style endpoint and turns one sentence into an MP3 you can download and hear.
 

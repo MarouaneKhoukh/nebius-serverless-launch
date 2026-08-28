@@ -28,6 +28,33 @@ PLANNING_ESTIMATES = {
     "smolvla-physical-ai-job": ("null", "null"),
 }
 
+DISPLAY_TITLES = {
+    "qwen3-serverless-endpoint": (
+        "Build an OpenAI-compatible chat API",
+        "Build an OpenAI-compatible chat API on Nebius Serverless",
+    ),
+    "sana-serverless-endpoint": (
+        "Generate images with a serverless API",
+        "Build a text-to-image API on Nebius Serverless",
+    ),
+    "kokoro-serverless-tts": (
+        "Build a serverless text-to-speech API",
+        "Build a text-to-speech API on Nebius Serverless",
+    ),
+    "qwen-image-edit-serverless": (
+        "Edit images through a serverless AI API",
+        "Build an AI image-editing API on Nebius Serverless",
+    ),
+    "axolotl-qwen-finetune-job": (
+        "Fine-tune a language model with QLoRA",
+        "Fine-tune a language model with QLoRA on Nebius Serverless",
+    ),
+    "smolvla-physical-ai-job": (
+        "Fine-tune a policy for physical AI",
+        "Fine-tune a physical-AI policy on Nebius Serverless",
+    ),
+}
+
 REQUIRED_FRONTMATTER = {
     "id",
     "status",
@@ -78,13 +105,14 @@ def main() -> None:
         assert metadata["slug"] == slug
         assert metadata["status"] == "in_review"
         assert metadata["github_url"] == source
+        expected_card_title, expected_page_title = DISPLAY_TITLES[slug]
+        assert metadata["catalog_card_title"] == expected_card_title
+        assert f"# {expected_page_title}\n" in index
         expected_cost, expected_minutes = PLANNING_ESTIMATES[slug]
         assert metadata["estimated_cost_per_run_usd"] == expected_cost
-        expected_qualifier = "not measured" if slug == "smolvla-physical-ai-job" else "approximate"
-        assert metadata["cost_qualifier"] == expected_qualifier
+        assert metadata["cost_qualifier"] == "approximate"
         assert metadata["time_to_first_run_minutes"] == expected_minutes
-        expected_time_qualifier = "not measured" if slug == "smolvla-physical-ai-job" else "approximately"
-        assert metadata["time_qualifier"] == expected_time_qualifier
+        assert metadata["time_qualifier"] == "approximately"
         assert metadata["metrics_verified_at"] == "null"
         assert metadata["published_at"] == "null"
         assert len(prompt) >= 40
