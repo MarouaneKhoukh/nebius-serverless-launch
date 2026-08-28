@@ -5,7 +5,7 @@ slug: "qwen3-serverless-endpoint"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "CMS adaptation of the existing Qwen3-0.6B one-click template in nebius/serverless-ai-cookbook. Live L40S validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required before publication."
+internal_content_description: "One-click Nebius Serverless chat endpoint recipe serving Qwen3-0.6B through vLLM's OpenAI-compatible API, with readiness checks, a sample completion, response validation, lifecycle guidance, and planning estimates."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-vllm-qwen3-0-6b"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Build an OpenAI-Compatible Serverless Chat API with Qwen3 and vLLM"

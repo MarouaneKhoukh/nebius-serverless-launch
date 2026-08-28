@@ -5,7 +5,7 @@ slug: "sana-serverless-endpoint"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "CMS adaptation of the existing Sana one-click endpoint template in nebius/serverless-ai-cookbook. Live L40S and media-output validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
+internal_content_description: "One-click Nebius Serverless text-to-image endpoint recipe serving Sana 1.6B on an L40S, with a seeded 1024px request, PNG validation, lifecycle guidance, and production considerations."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-sana"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Generate 1024px Images with Sana on a Serverless GPU Endpoint"

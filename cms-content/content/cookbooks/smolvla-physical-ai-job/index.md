@@ -5,7 +5,7 @@ slug: "smolvla-physical-ai-job"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "CMS entry for the SmolVLA one-click job template in MarouaneKhoukh/nebius-serverless-launch. A real regular H100 run completed 50 steps and persisted its checkpoint. A Serverless-job evaluator, a compatible model record, and measured cost and time-to-first-run are still required before publication."
+internal_content_description: "One-click Nebius Serverless physical-AI fine-tuning job recipe using SmolVLA and the SO-100 pick-and-place dataset, with bounded training, Object Storage persistence, checkpoint verification, and explicit robot-safety limitations."
 github_url: "https://github.com/MarouaneKhoukh/nebius-serverless-launch/tree/main/smolvla-finetune-job"
 video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
 catalog_card_title: "Fine-Tune a SmolVLA Policy for Physical AI with Serverless GPUs"

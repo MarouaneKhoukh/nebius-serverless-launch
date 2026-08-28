@@ -5,7 +5,7 @@ slug: "qwen-image-edit-serverless"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "CMS adaptation of the existing Qwen-Image-Edit-2511 one-click endpoint template in nebius/serverless-ai-cookbook. Live H100 and image-edit validation, a media-capable Serverless evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
+internal_content_description: "One-click Nebius Serverless image-editing endpoint recipe serving Qwen-Image-Edit-2511 with vLLM-Omni on an H100, with a multipart request, PNG validation, lifecycle guidance, and input-safety considerations."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-qwen-image-edit-2511"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Create a Serverless Image Editor with Qwen Image Edit"

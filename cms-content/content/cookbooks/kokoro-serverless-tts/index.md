@@ -5,7 +5,7 @@ slug: "kokoro-serverless-tts"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "CMS adaptation of the existing Kokoro-82M one-click endpoint template in nebius/serverless-ai-cookbook. Live L40S and audio-output validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
+internal_content_description: "One-click Nebius Serverless text-to-speech recipe serving Kokoro-82M through an OpenAI-compatible speech API, with MP3 generation, audio-response verification, lifecycle guidance, and production considerations."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-kokoro-82m"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
 catalog_card_title: "Turn Text into Speech with a Serverless Kokoro API"

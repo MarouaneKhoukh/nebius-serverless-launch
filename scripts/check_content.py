@@ -55,6 +55,15 @@ DISPLAY_TITLES = {
     ),
 }
 
+INTERNAL_DESCRIPTIONS = {
+    "qwen3-serverless-endpoint": "One-click Nebius Serverless chat endpoint recipe serving Qwen3-0.6B through vLLM's OpenAI-compatible API, with readiness checks, a sample completion, response validation, lifecycle guidance, and planning estimates.",
+    "sana-serverless-endpoint": "One-click Nebius Serverless text-to-image endpoint recipe serving Sana 1.6B on an L40S, with a seeded 1024px request, PNG validation, lifecycle guidance, and production considerations.",
+    "kokoro-serverless-tts": "One-click Nebius Serverless text-to-speech recipe serving Kokoro-82M through an OpenAI-compatible speech API, with MP3 generation, audio-response verification, lifecycle guidance, and production considerations.",
+    "qwen-image-edit-serverless": "One-click Nebius Serverless image-editing endpoint recipe serving Qwen-Image-Edit-2511 with vLLM-Omni on an H100, with a multipart request, PNG validation, lifecycle guidance, and input-safety considerations.",
+    "axolotl-qwen-finetune-job": "One-click Nebius Serverless fine-tuning job recipe using Axolotl and 4-bit QLoRA on Qwen2.5-0.5B, with bounded training, Object Storage persistence, adapter verification, and cleanup guidance.",
+    "smolvla-physical-ai-job": "One-click Nebius Serverless physical-AI fine-tuning job recipe using SmolVLA and the SO-100 pick-and-place dataset, with bounded training, Object Storage persistence, checkpoint verification, and explicit robot-safety limitations.",
+}
+
 REQUIRED_FRONTMATTER = {
     "id",
     "status",
@@ -105,6 +114,7 @@ def main() -> None:
         assert metadata["slug"] == slug
         assert metadata["status"] == "in_review"
         assert metadata["github_url"] == source
+        assert metadata["internal_content_description"] == INTERNAL_DESCRIPTIONS[slug]
         expected_card_title, expected_page_title = DISPLAY_TITLES[slug]
         assert metadata["catalog_card_title"] == expected_card_title
         assert f"# {expected_page_title}\n" in index

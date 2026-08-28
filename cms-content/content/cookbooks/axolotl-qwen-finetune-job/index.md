@@ -5,7 +5,7 @@ slug: "axolotl-qwen-finetune-job"
 category: "serverless-ai"
 author: "marouane-khoukh"
 model: null
-internal_content_description: "CMS adaptation of the existing Axolotl one-click job template in nebius/serverless-ai-cookbook. The template currently pre-fills H100 and 500 GiB while the separate official Nebius tutorial uses L40S and 450 GiB; DevRel should reconcile that difference. Live validation, a Serverless-job evaluator, a compatible model record, and measured cost and time-to-first-run are also required."
+internal_content_description: "One-click Nebius Serverless fine-tuning job recipe using Axolotl and 4-bit QLoRA on Qwen2.5-0.5B, with bounded training, Object Storage persistence, adapter verification, and cleanup guidance."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/job-axolotl-finetune"
 video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
 catalog_card_title: "Fine-Tune Qwen with Axolotl in a Serverless GPU Job"
