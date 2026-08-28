@@ -8,7 +8,7 @@ model: null
 internal_content_description: "CMS adaptation of the existing Qwen3-0.6B one-click template in nebius/serverless-ai-cookbook. Live L40S validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required before publication."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-vllm-qwen3-0-6b"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
-catalog_card_title: "Build an OpenAI-compatible chat API"
+catalog_card_title: "Build an OpenAI-Compatible Serverless Chat API with Qwen3 and vLLM"
 catalog_card_description: "Bring up Qwen3-0.6B behind vLLM, verify the chat API, and keep it available for about $0.80 per active hour."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
@@ -19,7 +19,7 @@ published_at: null
 sort: 100
 ---
 
-# Build an OpenAI-compatible chat API on Nebius Serverless
+# Build an OpenAI-Compatible Serverless Chat API with Qwen3 and vLLM
 
 An endpoint marked `RUNNING` is not useful until it can answer a request. This recipe takes the compact [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) model from a pre-filled Nebius Serverless form to a real OpenAI-compatible chat response, with an explicit readiness check and cleanup at the end.
 

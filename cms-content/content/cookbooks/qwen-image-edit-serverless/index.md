@@ -8,7 +8,7 @@ model: null
 internal_content_description: "CMS adaptation of the existing Qwen-Image-Edit-2511 one-click endpoint template in nebius/serverless-ai-cookbook. Live H100 and image-edit validation, a media-capable Serverless evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-qwen-image-edit-2511"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
-catalog_card_title: "Edit images through a serverless AI API"
+catalog_card_title: "Create a Serverless Image Editor with Qwen Image Edit"
 catalog_card_description: "Serve Qwen-Image-Edit-2511 through a multipart image API estimated at about $2.20 per active hour."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
@@ -19,7 +19,7 @@ published_at: null
 sort: 130
 ---
 
-# Build an AI image-editing API on Nebius Serverless
+# Create a Serverless Image Editor with Qwen Image Edit
 
 Image editing is a different API contract from text-to-image generation: the request must carry both pixels and an instruction. This recipe deploys [Qwen-Image-Edit-2511](https://huggingface.co/Qwen/Qwen-Image-Edit-2511), uploads a sample image as multipart form data, and decodes the edited result into a PNG.
 

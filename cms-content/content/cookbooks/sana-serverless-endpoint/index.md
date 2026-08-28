@@ -8,7 +8,7 @@ model: null
 internal_content_description: "CMS adaptation of the existing Sana one-click endpoint template in nebius/serverless-ai-cookbook. Live L40S and media-output validation, a Serverless-capable evaluator, a compatible model record, and measured cost and time-to-first-run are still required."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/endpoint-sana"
 video_url: "https://www.youtube.com/watch?v=Ftr-6JF08ZI"
-catalog_card_title: "Generate images with a serverless API"
+catalog_card_title: "Generate 1024px Images with Sana on a Serverless GPU Endpoint"
 catalog_card_description: "Turn prompts into 1024px images with Sana 1.6B on an endpoint estimated at about $0.80 per active hour."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
@@ -19,7 +19,7 @@ published_at: null
 sort: 110
 ---
 
-# Build a text-to-image API on Nebius Serverless
+# Generate 1024px Images with Sana on a Serverless GPU Endpoint
 
 Text-to-image demos often end with “the endpoint is healthy.” This recipe goes one step further: it deploys [Sana 1.6B](https://huggingface.co/Efficient-Large-Model/Sana_1600M_1024px_diffusers), submits a fixed prompt and seed, decodes the API response, and leaves you with a real PNG to inspect.
 

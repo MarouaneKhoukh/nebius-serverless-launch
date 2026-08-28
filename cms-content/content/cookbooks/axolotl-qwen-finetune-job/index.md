@@ -8,7 +8,7 @@ model: null
 internal_content_description: "CMS adaptation of the existing Axolotl one-click job template in nebius/serverless-ai-cookbook. The template currently pre-fills H100 and 500 GiB while the separate official Nebius tutorial uses L40S and 450 GiB; DevRel should reconcile that difference. Live validation, a Serverless-job evaluator, a compatible model record, and measured cost and time-to-first-run are also required."
 github_url: "https://github.com/nebius/serverless-ai-cookbook/tree/main/templates/job-axolotl-finetune"
 video_url: "https://www.youtube.com/watch?v=ZjD489E0lls"
-catalog_card_title: "Fine-tune a language model with QLoRA"
+catalog_card_title: "Fine-Tune Qwen with Axolotl in a Serverless GPU Job"
 catalog_card_description: "Run a bounded 30-step QLoRA fine-tune of Qwen2.5-0.5B, preserve the adapter in Object Storage, and inspect the result."
 estimated_cost_per_run_usd: 0.75
 cost_qualifier: "approximate"
@@ -19,7 +19,7 @@ published_at: null
 sort: 140
 ---
 
-# Fine-tune a language model with QLoRA on Nebius Serverless
+# Fine-Tune Qwen with Axolotl in a Serverless GPU Job
 
 Fine-tuning tutorials often prove that a training command starts but lose the output when the machine disappears. This recipe runs a deliberately small [Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B) QLoRA job and copies the completed adapter into mounted Object Storage before the Serverless Job ends.
 

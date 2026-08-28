@@ -30,28 +30,28 @@ PLANNING_ESTIMATES = {
 
 DISPLAY_TITLES = {
     "qwen3-serverless-endpoint": (
-        "Build an OpenAI-compatible chat API",
-        "Build an OpenAI-compatible chat API on Nebius Serverless",
+        "Build an OpenAI-Compatible Serverless Chat API with Qwen3 and vLLM",
+        "Build an OpenAI-Compatible Serverless Chat API with Qwen3 and vLLM",
     ),
     "sana-serverless-endpoint": (
-        "Generate images with a serverless API",
-        "Build a text-to-image API on Nebius Serverless",
+        "Generate 1024px Images with Sana on a Serverless GPU Endpoint",
+        "Generate 1024px Images with Sana on a Serverless GPU Endpoint",
     ),
     "kokoro-serverless-tts": (
-        "Build a serverless text-to-speech API",
-        "Build a text-to-speech API on Nebius Serverless",
+        "Turn Text into Speech with a Serverless Kokoro API",
+        "Turn Text into Speech with a Serverless Kokoro API",
     ),
     "qwen-image-edit-serverless": (
-        "Edit images through a serverless AI API",
-        "Build an AI image-editing API on Nebius Serverless",
+        "Create a Serverless Image Editor with Qwen Image Edit",
+        "Create a Serverless Image Editor with Qwen Image Edit",
     ),
     "axolotl-qwen-finetune-job": (
-        "Fine-tune a language model with QLoRA",
-        "Fine-tune a language model with QLoRA on Nebius Serverless",
+        "Fine-Tune Qwen with Axolotl in a Serverless GPU Job",
+        "Fine-Tune Qwen with Axolotl in a Serverless GPU Job",
     ),
     "smolvla-physical-ai-job": (
-        "Fine-tune a policy for physical AI",
-        "Fine-tune a physical-AI policy on Nebius Serverless",
+        "Fine-Tune a SmolVLA Policy for Physical AI with Serverless GPUs",
+        "Fine-Tune a SmolVLA Policy for Physical AI with Serverless GPUs",
     ),
 }
 
