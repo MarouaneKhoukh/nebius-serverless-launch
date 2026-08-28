@@ -12,7 +12,7 @@ catalog_card_title: "Create a Serverless Image Editor with Qwen Image Edit"
 catalog_card_description: "Serve Qwen-Image-Edit-2511 through a multipart image API estimated at about $2.20 per active hour."
 estimated_cost_per_run_usd: null
 cost_qualifier: "approximate"
-time_to_first_run_minutes: 20
+time_to_first_run_minutes: null
 time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
@@ -106,6 +106,6 @@ nebius ai endpoint delete --id "$ENDPOINT_ID"
 
 Stopped endpoints do not incur compute charges, but mounted volumes can continue to be billed. Before accepting user images, enforce MIME type, dimensions and payload size; strip unnecessary metadata; add authentication, timeouts and moderation; and define a retention policy. For generation without an input image, use the Sana text-to-image recipe instead.
 
-> **Planning estimate:** approximately **$2.20 per active hour** and **20 minutes** from creation to the first verified edited PNG. The hourly figure is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-h100-sxm` / `1gpu-16vcpu-200gb` endpoint, and a 500 GiB disk. It is not a measured run; actual charges vary with active duration, storage, egress, and taxes.
+> **Planning estimate:** approximately **$2.20 per active hour**. The hourly figure is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-h100-sxm` / `1gpu-16vcpu-200gb` endpoint, and a 500 GiB disk. No time-to-first-result estimate is asserted until a controlled run measures it; actual charges vary with active duration, storage, egress, and taxes.
 
 The linked video covers the general endpoint workflow. It is not evidence of edit quality or measured performance; `metrics_verified_at` remains empty until a controlled run records the result.

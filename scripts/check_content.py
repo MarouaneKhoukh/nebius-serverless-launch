@@ -23,8 +23,8 @@ PLANNING_ESTIMATES = {
     "qwen3-serverless-endpoint": ("null", "10"),
     "sana-serverless-endpoint": ("null", "15"),
     "kokoro-serverless-tts": ("null", "10"),
-    "qwen-image-edit-serverless": ("null", "20"),
-    "axolotl-qwen-finetune-job": ("0.75", "20"),
+    "qwen-image-edit-serverless": ("null", "null"),
+    "axolotl-qwen-finetune-job": ("0.75", "null"),
     "smolvla-physical-ai-job": ("null", "null"),
 }
 

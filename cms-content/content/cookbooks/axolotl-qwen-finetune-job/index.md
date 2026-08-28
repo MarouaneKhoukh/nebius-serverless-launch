@@ -12,7 +12,7 @@ catalog_card_title: "Fine-Tune Qwen with Axolotl in a Serverless GPU Job"
 catalog_card_description: "Run a bounded 30-step QLoRA fine-tune of Qwen2.5-0.5B, preserve the adapter in Object Storage, and inspect the result."
 estimated_cost_per_run_usd: 0.75
 cost_qualifier: "approximate"
-time_to_first_run_minutes: 20
+time_to_first_run_minutes: null
 time_qualifier: "approximately"
 metrics_verified_at: null
 published_at: null
@@ -94,6 +94,6 @@ nebius ai job delete "$JOB_ID"
 
 Keep the adapter only if you need it, then remove test-only bucket objects and dedicated IAM bindings. The one-click template currently pre-fills H100 and 500 GiB, while a separate Nebius tutorial uses different resources; this draft follows the template and keeps that difference flagged for editorial review.
 
-> **Planning estimate:** approximately **$0.75** and **20 minutes** from creation to a persisted adapter. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-h100-sxm` / `1gpu-16vcpu-200gb` job, a 500 GiB disk, and deletion after verification. It is not a measured run and excludes taxes, egress, and retained Object Storage.
+> **Planning estimate:** approximately **$0.75 per run**. This is a rounded editorial estimate based on the August 27, 2026 [Nebius Compute list rates](https://docs.nebius.com/compute/resources/pricing), a preemptible `gpu-h100-sxm` / `1gpu-16vcpu-200gb` job, a 500 GiB disk, and deletion after verification. No time-to-first-run estimate is asserted until a controlled run measures it; the cost estimate excludes taxes, egress, and retained Object Storage.
 
 Next, evaluate the adapter against the untouched base model on representative prompts. The linked video explains the broader Serverless fine-tuning workflow, not the quality or measured performance of this exact 30-step run; `metrics_verified_at` remains empty.
